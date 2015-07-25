@@ -41,12 +41,12 @@ void RunGpx::DelayReadStdOut()
     QByteArray rgb = pprocess->read(256000L);
     if (!rgb.isEmpty()) {
         tc.insertText(QLatin1String(rgb));
-        ui->teLogOutput->setTextCursor(tc);
         ptimer->start(10);
     }
     else if (pprocess->state() != QProcess::Running) {
         tc.insertText(tr("GPX finished with code = %1.\n").arg(pprocess->exitCode()));
     }
+    ui->teLogOutput->setTextCursor(tc);
 }
 
 void RunGpx::ReadStdOut()
