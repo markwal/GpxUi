@@ -23,3 +23,11 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     rungpx.ui
+
+DISTFILES += \
+    gpxui.rc
+
+RESOURCES += \
+    gpxui.qrc
+
+RC_FILE = gpxui.rc

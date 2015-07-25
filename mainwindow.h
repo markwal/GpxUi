@@ -22,8 +22,6 @@ private slots:
 
     void on_tbtnInputGcode_clicked();
 
-    void on_tbtnOutputX3g_clicked();
-
     void on_btnTranslate_clicked();
 
 private:

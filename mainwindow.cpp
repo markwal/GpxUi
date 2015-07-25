@@ -36,13 +36,17 @@ void MainWindow::on_tbtnInputGcode_clicked()
     ui->editInput->setText(QFileDialog::getOpenFileName());
 }
 
-void MainWindow::on_tbtnOutputX3g_clicked()
-{
-    ui->editOutput->setText(QFileDialog::getOpenFileName());
-}
-
 void MainWindow::on_btnTranslate_clicked()
 {
+    QFileInfo fi(ui->editInput->text());
+    QDir dir(ui->editInput->text());
+    QString sDefaultFileName = dir.absoluteFilePath(fi.completeBaseName() + ".x3g");
+
+    QString sFileName = QFileDialog::getSaveFileName(this, tr("X3g Output File"),
+        sDefaultFileName, tr("X3g (*.x3g *.s3g)"));
+    if (sFileName.isEmpty())
+        return; // user cancelled
+
     RunGpx rungpx;
-    rungpx.Translate(ui->editInput->text(), ui->editOutput->text());
+    rungpx.Translate(ui->editInput->text(), sFileName);
 }

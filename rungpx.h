@@ -2,14 +2,14 @@
 #define RUNGPX_H
 
 #include <QDialog>
+#include <QTextCursor>
 
 class QProcess;
+class QTimer;
 
 namespace Ui {
 class RunGpx;
 }
-
-class LogModel;
 
 class RunGpx : public QDialog
 {
@@ -23,12 +23,14 @@ public:
 
 public slots:
     void ReadStdOut();
+    void DelayReadStdOut();
     void Finished(int ec);
 
 private:
     Ui::RunGpx *ui;
-    QProcess *process;
-    LogModel *lm;
+    QTextCursor tc;
+    QProcess *pprocess;
+    QTimer *ptimer;
 };
 
 #endif // RUNGPX_H
