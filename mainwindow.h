@@ -19,10 +19,9 @@ public:
 
 private slots:
     void on_btnAdvancedToggle_clicked();
-
     void on_tbtnInputGcode_clicked();
-
     void on_btnTranslate_clicked();
+    void on_about();
 
 private:
     Ui::MainWindow *ui;

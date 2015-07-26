@@ -14,12 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    rungpx.cpp \
-    logmodel.cpp
+    rungpx.cpp
 
 HEADERS  += mainwindow.h \
-    rungpx.h \
-    logmodel.h
+    rungpx.h
 
 FORMS    += mainwindow.ui \
     rungpx.ui
