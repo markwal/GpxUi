@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QMessageBox>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,9 +37,26 @@ void MainWindow::on_btnAdvancedToggle_clicked()
 
 void MainWindow::on_tbtnInputGcode_clicked()
 {
-    QString s = QFileDialog::getOpenFileName();
-    if (!s.isEmpty())
+    QSettings settings;
+
+    // Attempt to set the current directory to the directory in the edit box.
+    // If it is empty, or not a folder, attempt to use the most recent folder.
+    // Otherwise, give up and let QFileDialog decide
+    QString s = ui->editInput->text();
+    QDir dir(QFileInfo(s).path());
+    if (s.isEmpty() || !dir.exists()) {
+        s = settings.value("mostRecentFolder", "").toString();
+        if (!s.isEmpty())
+            dir.setPath(s);
+    }
+
+    s = QFileDialog::getOpenFileName(this, tr("Choose Gcode File"), dir.cleanPath(dir.absolutePath()), tr("Gcode (*.gcode *.gco *.g)"));
+
+    // Save the most recent folder in settings
+    if (!s.isEmpty()) {
+        settings.setValue("mostRecentFolder", QFileInfo(s).path());
         ui->editInput->setText(s);
+    }
 }
 
 void MainWindow::on_btnTranslate_clicked()
@@ -58,11 +76,14 @@ void MainWindow::on_btnTranslate_clicked()
 
 void MainWindow::on_about()
 {
-    QMessageBox::about(this, "About GPX",
-    "GPX 2.1-alpha-markwal\n\n" // GPX_VERSION
-    "GPX was created by Dr. Henry Thomas (aka Wingcommander) in April 2013.\n\n"
-    "Copyright (c) 2013 WHPThomas, All rights reserved.\n"
+    QMessageBox::about(this, "About GpxUi",
+    "GpxUi 2.1-alpha-markwal\n\n" // TODO: Pick up version from git tag
 
+    "GpxUi is a graphical user interface wrapped around GPX, a command line utility\n\n"
+
+    "GPX was created by Dr. Henry Thomas (aka Wingcommander) in April 2013.\n\n"
+
+    "Copyright (c) 2013 WHPThomas, All rights reserved.\n"
     "Additional changes Copyright (c) 2014, 2015 DNewman, All rights reserved.\n"
     "GpxUI (GUI) Copyright (c) 2015 Mark Walker, All rights reserved.\n\n"
 

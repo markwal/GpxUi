@@ -7,6 +7,10 @@ int main(int argc, char *argv[])
 {
     QApplication::setStyle("Fusion");
     QApplication a(argc, argv);
+
+    a.setOrganizationName("MarkWal");
+    a.setOrganizationDomain("markwal.github.io");
+    a.setApplicationName("GpxUi");
 //    QSplashScreen splash;
 //    splash.show();
 /*
