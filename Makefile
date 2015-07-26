@@ -1,31 +1,15 @@
 SUBDIRS = build/mingw32
+MAKEFILES = $(addsuffix /Makefile,$(SUBDIRS))
 
-.PHONY: first all clean test
+.PHONY: first all clean test debug release
 
-first:
+first all clean test debug release: $(MAKEFILES)
 	for dir in $(SUBDIRS); do \
 		echo "Entering $$dir"; \
 		make -C $$dir $@; \
 		echo "Exiting $$dir"; \
 	done
 
-all:
-	for dir in $(SUBDIRS); do \
-		echo "Entering $$dir"; \
-		make -C $$dir $@; \
-		echo "Exiting $$dir"; \
-	done
-
-clean:
-	for dir in $(SUBDIRS); do \
-		echo "Entering $$dir"; \
-		make -C $$dir $@; \
-		echo "Exiting $$dir"; \
-	done
-
-test:
-	for dir in $(SUBDIRS); do \
-		echo "Entering $$dir"; \
-		make -C $$dir $@; \
-		echo "Exiting $$dir"; \
-	done
+$(MAKEFILES): GpxUi.Pro
+	mkdir -p $(dir $@)
+	cd $(dir $@); qmake ../../$< "CONFIG+=debug"
