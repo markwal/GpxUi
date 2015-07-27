@@ -1,5 +1,6 @@
-SUBDIRS = build/mingw32
-MAKEFILES = $(addsuffix /Makefile,$(SUBDIRS))
+QTSUBDIRS = build/mingw32
+SUBDIRS = $(QTSUBDIRS) gpx
+QTMAKEFILES = $(addsuffix /Makefile,$(QTSUBDIRS))
 
 .PHONY: first all clean test debug release
 
