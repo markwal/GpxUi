@@ -17,4 +17,4 @@ $(QTMAKEFILES): GpxUi.Pro
 	cd $(dir $@); qmake ../../$< "CONFIG+=debug"
 
 build/version.h: .git/HEAD .git/index
-	@echo "#define GPXUI_VERSION $(GPXUI_VERSION)" > $@
+	@echo "#define GPXUI_VERSION \"$(GPXUI_VERSION)\"" > $@

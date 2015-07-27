@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "rungpx.h"
+#include "build/version.h"
 
 #include <QFileDialog>
 #include <QDebug>
@@ -77,7 +78,7 @@ void MainWindow::on_btnTranslate_clicked()
 void MainWindow::on_about()
 {
     QMessageBox::about(this, "About GpxUi",
-    "GpxUi 2.1-alpha-markwal\n\n" // TODO: Pick up version from git tag
+    "GpxUi v" GPXUI_VERSION "\n\n"
 
     "GpxUi is a graphical user interface wrapped around GPX, a command line utility\n\n"
 
