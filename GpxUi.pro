@@ -29,3 +29,7 @@ RESOURCES += \
     gpxui.qrc
 
 RC_FILE = gpxui.rc
+
+QMAKE_CXXFLAGS_RELEASE += -g
+QMAKE_CFLAGS_RELEASE += -g
+QMAKE_LFLAGS_RELEASE =
