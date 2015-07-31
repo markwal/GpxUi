@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     rungpx.cpp
 
 HEADERS  += mainwindow.h \
-    rungpx.h
+    rungpx.h \
+    build/version.h
 
 FORMS    += mainwindow.ui \
     rungpx.ui
