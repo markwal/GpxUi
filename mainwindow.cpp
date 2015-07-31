@@ -82,16 +82,18 @@ void MainWindow::on_about()
 
     "GpxUi is a graphical user interface wrapped around GPX, a command line utility\n\n"
 
+    "GPX is a post process utility for converting gcode output from 3D slicing "
+    "software like Cura, KISSlicer, S3DCreator and Slic3r to x3g files for standalone "
+    "3D printing on Makerbot Cupcake, ThingOMatic, and Replicator 1/2/2x printers "
+    "- with support for both stock and SailFish firmwares\n\n"
+
+    "The sources for this version are found at " GPXUI_ORIGIN "\n\n"
+
     "GPX was created by Dr. Henry Thomas (aka Wingcommander) in April 2013.\n\n"
 
     "Copyright (c) 2013 WHPThomas, All rights reserved.\n"
     "Additional changes Copyright (c) 2014, 2015 DNewman, All rights reserved.\n"
     "GpxUI (GUI) Copyright (c) 2015 Mark Walker, All rights reserved.\n\n"
-
-    "GPX is a post process utility for converting gcode output from 3D slicing "
-    "software like Cura, KISSlicer, S3DCreator and Slic3r to x3g files for standalone "
-    "3D printing on Makerbot Cupcake, ThingOMatic, and Replicator 1/2/2x printers "
-    "- with support for both stock and SailFish firmwares\n\n"
 
     "This program is free software; you can redistribute it and/or modify "
     "it under the terms of the GNU General Public License as published by "
