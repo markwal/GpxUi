@@ -29,7 +29,7 @@ endif
 
 .PHONY: first all clean test debug release populatewinbin windeployqt squirrel.windows
 
-first all clean test debug release: $(QTMAKEFILES) build/version.h
+first all clean test debug release: build/version.h $(QTMAKEFILES)
 	for dir in $(SUBDIRS); do \
 		echo "Entering $$dir"; \
 		make -C $$dir $@; \
@@ -41,6 +41,7 @@ $(QTMAKEFILES): GpxUi.Pro
 	cd $(dir $@); qmake ../../$< -r -spec win32-g++ "CONFIG+=debug"
 
 build/version.h: .git/HEAD .git/index
+	mkdir -p build
 	@echo "#define GPXUI_VERSION \"$(GPXUI_VERSION)\"" > $@
 	@echo "#define GPXUI_ORIGIN \"$(GPXUI_ORIGIN)\"" >> $@
 
