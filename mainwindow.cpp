@@ -91,7 +91,7 @@ void MainWindow::on_about()
 
     "GpxUi (GUI) Copyright (c) 2015 Mark Walker, All rights reserved.\n"
     "GPX Copyright (c) 2013 WHPThomas, All rights reserved.\n"
-    "Additional changes Copyright (c) 2014, 2015 DNewman, All rights reserved.\n"
+    "Additional changes Copyright (c) 2014, 2015 DNewman, All rights reserved.\n\n"
 
     "This program is free software; you can redistribute it and/or modify "
     "it under the terms of the GNU General Public License as published by "

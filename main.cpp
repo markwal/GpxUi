@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "orderedmap.h"
+
 #include <QApplication>
 #include <QtGui>
 #include <QSplashScreen>
@@ -32,6 +34,13 @@ int main(int argc, char *argv[])
         s.exec();
     }
 */
+    OrderedMap<QString, QString> om;
+    om.append("key1", "value1");
+    om.append("key2", "value2");
+    om.append("key3", "value3");
+    qDebug() << om["key1"];
+    qDebug() << om.indexOf("key2");;
+    qDebug() << om["key3"];
 
     MainWindow w;
     w.show();

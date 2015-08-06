@@ -18,6 +18,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     rungpx.h \
+    orderedmap.h \
     build/version.h
 
 FORMS    += mainwindow.ui \
