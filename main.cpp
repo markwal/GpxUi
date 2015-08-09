@@ -39,8 +39,13 @@ int main(int argc, char *argv[])
     om.append("key2", "value2");
     om.append("key3", "value3");
     qDebug() << om["key1"];
-    qDebug() << om.indexOf("key2");;
     qDebug() << om["key3"];
+
+    OrderedMap<QString, QString>::iterator i = om.begin();
+    for (;i != om.end();i++) {
+        qDebug() << i.key();
+        qDebug() << i.value();
+    }
 
     MainWindow w;
     w.show();

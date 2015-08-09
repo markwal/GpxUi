@@ -14,12 +14,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    rungpx.cpp
+    rungpx.cpp \
+    iniedit.cpp \
+    inih/ini.c
 
 HEADERS  += mainwindow.h \
     rungpx.h \
     orderedmap.h \
-    build/version.h
+    build/version.h \
+    inih/ini.h
 
 FORMS    += mainwindow.ui \
     rungpx.ui

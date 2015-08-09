@@ -1,3 +1,6 @@
 [submodule "GPX"]
 	path = GPX
 	url = https://github.com/markwal/GPX
+[submodule "inih"]
+	path = inih
+	url = https://github.com/markwal/inih

@@ -2,60 +2,119 @@
 #define ORDEREDMAP_H
 
 #include <QHash>
-#include <QList>
+#include <QLinkedList>
 
 template <class Key, class T>
 class OrderedMap
 {
+    typedef struct {
+        Key key;
+        T value;
+    } Node;
+    typedef typename QLinkedList<Node>::iterator NodeIterator;
+    typedef typename QLinkedList<Node>::const_iterator ConstNodeIterator;
+
 public:
-    OrderedMap();
-    ~OrderedMap();
+    OrderedMap() {}
+    ~OrderedMap() {}
 
-    int append(const Key& key, const T& value);
-    inline OrderedMap<Key, T>& operator<<(const T& t) { append(t); return *this; }
+    class const_iterator;
+    class iterator
+    {
+        friend class const_iterator;
+        NodeIterator i;
 
-    inline const T& at(int i) const {return plist[i];};
-    inline int indexOf(const Key& key) const {return phash->value(key, -1);};
+    public:
+        inline iterator() {};
+        inline iterator(NodeIterator o) : i(o) { }
+        inline const Key &key() const { return i->key; }
+        inline T &value() const { return i->value; }
+        inline T &operator*() const { return i->value; }
+        inline T *operator->() const { return &i->value; }
+        inline bool operator==(const iterator &other) const { return i == other.i; }
+        inline bool operator!=(const iterator &other) const { return i != other.i; }
+        inline iterator &operator++() { i++; return *this; }
+        inline iterator operator++(int) { iterator r = *this; i++; return r; }
+        inline iterator &operator--() { i--; return *this; }
+        inline iterator operator--(int) { iterator r = *this; i--; return r; }
+    };
 
-    const T value(const Key& key) const;
-    inline const T operator[](const Key& key) const {return value(key);};
+    class const_iterator
+    {
+        friend class iterator;
+        ConstNodeIterator i;
+
+    public:
+        inline const_iterator() {};
+        inline const_iterator(NodeIterator o) : i(o) { }
+        inline const Key &key() const { return i->key; }
+        inline const T &value() const { return i->value; }
+        inline const T &operator*() const { return i->value; }
+        inline const T *operator->() const { return &i->value; }
+        inline bool operator==(const const_iterator &other) const { return i == other.i; }
+        inline bool operator!=(const const_iterator &other) const { return i != other.i; }
+        inline const_iterator &operator++() { i++; return *this; }
+        inline const_iterator operator++(int) { const_iterator r = *this; i++; return r; }
+        inline const_iterator &operator--() { i--; return *this; }
+        inline const_iterator operator--(int) { const_iterator r = *this; i--; return r; }
+    };
+
+    iterator begin() { return iterator(list.begin()); }
+    iterator end() { return iterator(list.end()); }
+
+    void append(const Key &key, const T &value);
+    int remove(const Key &key);
+    const T value(const Key &key) const;
+    T &operator[](const Key &key);
+    inline const T operator[](const Key &key) const {return value(key);}
+    void clear();
 
 private:
-    QHash<Key, int> *phash;
-    QList<T> *plist;
+    QHash<Key, NodeIterator> hash;
+    QLinkedList<Node> list;
 };
 
 template <class Key, class T>
-OrderedMap<Key, T>::OrderedMap()
+T &OrderedMap<Key, T>::operator[](const Key &key)
 {
-    phash = new QHash<Key, int>();
-    plist = new QList<T>();
+    NodeIterator i = hash.value(key, list.end());
+    if (i == list.end()) {
+        append(key, T());
+        --i;
+    }
+    return i->value;
 }
 
 template <class Key, class T>
-OrderedMap<Key, T>::~OrderedMap()
+const T OrderedMap<Key, T>::value(const Key &key) const
 {
-    delete phash;
-    phash = NULL;
-    delete plist;
-    plist = NULL;
+    ConstNodeIterator i = hash.value(key, list.end());
+    return i != list.end() ? i->value : T();
 }
 
 template <class Key, class T>
-const T OrderedMap<Key, T>::value(const Key& key) const
+void OrderedMap<Key, T>::append(const Key &key, const T &value)
 {
-    int i = indexOf(key);
-    return (i == -1) ? T() : plist->value(i);
+    Node node = {key, value};
+    hash[key] = list.insert(list.end(), node);
 }
 
 template <class Key, class T>
-int OrderedMap<Key, T>::append(const Key& key, const T& value)
+int OrderedMap<Key, T>::remove(const Key &key)
 {
-    int i = plist->size();
-    plist->append(value);
-    Q_ASSERT(plist->at(i) == value);
-    (*phash)[key] = i;
-    return i;
+    NodeIterator i = hash.value(key, list.end());
+    if (i == list.end())
+        return 0;
+
+    hash.remove(key);
+    list.erase(i);
+    return 1;
 }
 
+template <class Key, class T>
+void OrderedMap<Key, T>::clear()
+{
+    hash.clear();
+    list.clear();
+}
 #endif // ORDEREDMAP_H
