@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = GpxUi
 TEMPLATE = app
 
+DEFINES += NOTIFY_SECTION_CHANGE=1
 
 SOURCES += main.cpp\
         mainwindow.cpp \

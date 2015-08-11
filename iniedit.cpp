@@ -10,6 +10,8 @@ extern "C" {
 }
 
 #include <QString>
+#include <QTextStream>
+QTextStream &qStdout();
 
 static char *inihReader(char *szBuffer, int cbBuffer, void *user)
 {
@@ -32,26 +34,26 @@ char *IniEditor::parserReader(char *szBuffer, int cbBuffer)
     if (cb == 0)
         return NULL;
 
-    om[sSectionParsing].append(QString("%d").arg(++lnParsing), Element(true, QString(), szLineParsing));
+    msect[sSectionParsing].append(QString("%1").arg(++ilineParsing), Element(true, QString(), szLineParsing));
     return szBuffer;
 }
 
 int IniEditor::parserHandler(const char *szSection, const char *szName, const char *szValue)
 {
     QString sSection(szSection);
-    om[sSectionParsing].remove(QString("%d").arg(lnParsing)); // remove the provisional
+    msect[sSectionParsing].remove(QString("%1").arg(ilineParsing)); // remove the provisional
     sSectionParsing = sSection;
     if (szName[0])
-        om[sSectionParsing].append(szName, Element(false, szValue, szLineParsing));
+        msect[sSectionParsing].append(szName, Element(false, szValue, szLineParsing));
     return true;
 }
 
 bool IniEditor::read(QString sPathname)
 {
-    om.clear();
+    msect.clear();
     fe = QFileDevice::NoError;
     szLineParsing = NULL;
-    lnParsing = 0;
+    ilineParsing = 0;
     sSectionParsing = ""; // fake section for front matter before first section
 
     fileParsing.setFileName(sPathname);
@@ -70,4 +72,16 @@ bool IniEditor::read(QString sPathname)
     return true;
 }
 
-
+void IniEditor::dump(void)
+{
+    for (SectionIterator is = msect.begin(); is != msect.end(); is++) {
+        qStdout() << "[" << is.key() << "]" << endl;
+        for (ElementIterator ie = is.value().begin(); ie != is.value().end(); ie++) {
+            Element &e = ie.value();
+            if (e.fNonValueLine)
+                qStdout() << e.sLine;
+            else
+                qStdout() << ie.key() << "=" << e.sValue << endl;
+        }
+    }
+}

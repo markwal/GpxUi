@@ -1,9 +1,17 @@
 #include "mainwindow.h"
 #include "orderedmap.h"
+#include "iniedit.h"
 
 #include <QApplication>
 #include <QtGui>
 #include <QSplashScreen>
+#include <QTextStream>
+
+QTextStream &qStdout()
+{
+    static QTextStream ts(stdout);
+    return ts;
+}
 
 int main(int argc, char *argv[])
 {
@@ -38,14 +46,20 @@ int main(int argc, char *argv[])
     om.append("key1", "value1");
     om.append("key2", "value2");
     om.append("key3", "value3");
-    qDebug() << om["key1"];
-    qDebug() << om["key3"];
+    qStdout() << om["key1"] << endl;
+    qStdout() << om["key3"] << endl;
 
     OrderedMap<QString, QString>::iterator i = om.begin();
     for (;i != om.end();i++) {
-        qDebug() << i.key();
-        qDebug() << i.value();
+        qStdout() << i.key() << "=" << i.value() << endl;
     }
+
+    IniEditor ie;
+
+    ie.read("C:/cyg/home/markw/GpxUi/GPX/gpx.ini");
+    qStdout() << ie.section("printer")["machine_type"].sValue << endl;
+
+    ie.dump();
 
     MainWindow w;
     w.show();

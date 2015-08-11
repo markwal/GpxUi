@@ -10,13 +10,18 @@ public:
     Element() {}
     Element(bool fNonValueLine, QString sValue, QString sLine):
         fNonValueLine(fNonValueLine), sValue(sValue), sLine(sLine) {}
-private:
+
     bool fNonValueLine;
     QString sValue;
     QString sLine;
 };
 
 typedef OrderedMap<QString, Element> Section;
+typedef OrderedMap<QString, Section> SectionMap;
+typedef SectionMap::iterator SectionIterator;
+typedef OrderedMap<QString, Element> ElementMap;
+typedef ElementMap::iterator ElementIterator;
+
 
 class IniEditor
 {
@@ -27,14 +32,16 @@ public:
     bool read(QString sPathname);
     QFileDevice::FileError error() {return fe;}
 
+    Section section(QString s) {return msect[s];}
+    void dump(void);
+
 private:
-    OrderedMap<QString, Section> om;
+    SectionMap msect;
     QFileDevice::FileError fe;
     QFile fileParsing;
     char *szLineParsing;
-    int lnParsing;
+    int ilineParsing;
     QString sSectionParsing;
-
 
 public: // not really though
     char *parserReader(char *szBuffer, int cbBuffer);
