@@ -34,24 +34,29 @@ char *IniEditor::parserReader(char *szBuffer, int cbBuffer)
     if (cb == 0)
         return NULL;
 
-    msect[sSectionParsing].append(QString("%1").arg(++ilineParsing), Element(true, QString(), szLineParsing));
+    msect[sSectionParsing].append(QString("_ln_%1").arg(++ilineParsing), Element(true, QString(), szLineParsing));
     return szBuffer;
 }
 
 int IniEditor::parserHandler(const char *szSection, const char *szName, const char *szValue)
 {
     QString sSection(szSection);
-    msect[sSectionParsing].remove(QString("%1").arg(ilineParsing)); // remove the provisional
+    msect[sSectionParsing].remove(QString("_ln_%1").arg(ilineParsing)); // remove the provisional
     sSectionParsing = sSection;
     if (szName[0])
         msect[sSectionParsing].append(szName, Element(false, szValue, szLineParsing));
     return true;
 }
 
-bool IniEditor::read(QString sPathname)
+void IniEditor::clear(void)
 {
     msect.clear();
     fe = QFileDevice::NoError;
+}
+
+bool IniEditor::read(QString sPathname)
+{
+    clear();
     szLineParsing = NULL;
     ilineParsing = 0;
     sSectionParsing = ""; // fake section for front matter before first section
@@ -84,4 +89,16 @@ void IniEditor::dump(void)
                 qStdout() << ie.key() << "=" << e.sValue << endl;
         }
     }
+}
+
+const QString Section::getValue(const QString &key)
+{
+    ConstElementIterator ie = constFind(key);
+    return (ie == constEnd()) ? QString::null : ie.value().sValue;
+}
+
+const QString Section::getValue(const QString &key, const QString &sDefault)
+{
+    ConstElementIterator ie = constFind(key);
+    return (ie == constEnd()) ? sDefault : ie.value().sValue;
 }

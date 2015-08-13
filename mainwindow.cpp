@@ -8,16 +8,32 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#ifdef Q_OS_WIN
+#define INIFILENAME_PREFIX ""
+#else
+#define INIFILENAME_PREFIX "."
+#endif
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     heightCollapsed = 0;
     ui->setupUi(this);
+    populateMachineType(*ui->comboMachineType);
     setAdvanced(false);
     resize(sizeHint());
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(on_about()));
+
+    QString sFilename = INIFILENAME_PREFIX "gpxui.ini";
+    QFileInfo fi(sFilename);
+    if (fi.exists())
+        ie.read(sFilename);
+    else
+        ie.clear();
+
+    refreshFromIni(ie);
 }
 
 MainWindow::~MainWindow()
@@ -75,6 +91,44 @@ void MainWindow::on_btnTranslate_clicked()
     rungpx.Translate(ui->editInput->text(), sFileName);
 }
 
+void MainWindow::populateMachineType(QComboBox &combo)
+{
+    int imtMax = combo.maxCount();
+    combo.clear();
+    combo.insertItem(imtMax, "Cupcake Gen3 XYZ, Mk5/6 + Gen4 Extruder", "c3");
+    combo.insertItem(imtMax, "Cupcake Gen4 XYZ, Mk5/6 + Gen4 Extruder", "c4");
+    combo.insertItem(imtMax, "Cupcake Pololu XYZ, Mk5/6 + Gen4 Extruder", "cp4");
+    combo.insertItem(imtMax, "Cupcake Pololu XYZ, Mk5/6 + Pololu Extruder", "cpp");
+    combo.insertItem(imtMax, "Core-XY with HBP - single extruder", "cxy");
+    combo.insertItem(imtMax, "Core-XY with HBP - single extruder, slow Z", "cxysz");
+    combo.insertItem(imtMax, "Clone R1 Single with HBP", "cr1");
+    combo.insertItem(imtMax, "Clone R1 Dual with HBP", "cr1d");
+    combo.insertItem(imtMax, "FlashForge Creator Pro", "fcp");
+    combo.insertItem(imtMax, "Replicator 1 - single extruder", "r1");
+    combo.insertItem(imtMax, "Replicator 1 - dual extruder", "r1d");
+    combo.insertItem(imtMax, "Replicator 2", "r2");
+    combo.insertItem(imtMax, "Replicator 2 with HBP", "r2h");
+    combo.insertItem(imtMax, "Replicator 2X", "r2x");
+    combo.insertItem(imtMax, "ZYYX - single extruder", "z");
+    combo.insertItem(imtMax, "ZYYX - dual extruder", "zd");
+}
+
+void MainWindow::refreshFromIni(IniEditor &ie)
+{
+    // main
+    Section sect = ie.section("printer");
+    int imt = ui->comboMachineType->findData(sect.getValue("machine_type", "r2"));
+    if (imt != -1)
+        ui->comboMachineType->setCurrentIndex(imt);
+    QString s = sect.getValue("reprap_flavor", "reprap");
+    ui->comboGcodeFlavor->setCurrentIndex(s.compare("makerbot", Qt::CaseInsensitive) == 0);
+
+    // advanced
+    ui->cboxProgress->setChecked(sect.getValue("build_progress", "1").toInt());
+    ui->cboxDitto->setChecked(sect.getValue("ditto_printing", "0").toInt());
+    ui->cboxRecalc->setChecked(sect.getValue("recalculate_5d", "0").toInt());
+}
+
 void MainWindow::on_about()
 {
     QMessageBox::about(this, "About GpxUi",
@@ -91,7 +145,8 @@ void MainWindow::on_about()
 
     "GpxUi (GUI) Copyright (c) 2015 Mark Walker, All rights reserved.\n"
     "GPX Copyright (c) 2013 WHPThomas, All rights reserved.\n"
-    "Additional changes Copyright (c) 2014, 2015 DNewman, All rights reserved.\n\n"
+    "Additional changes Copyright (c) 2014, 2015 DNewman, All rights reserved.\n"
+    "Portions copyright (c) 2009, Ben Hoyt, All rights reserved.\n\n"
 
     "This program is free software; you can redistribute it and/or modify "
     "it under the terms of the GNU General Public License as published by "
@@ -101,6 +156,9 @@ void MainWindow::on_about()
     "This program is distributed in the hope that it will be useful, "
     "but WITHOUT ANY WARRANTY; without even the implied warranty of "
     "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-    "GNU General Public License for more details."
+    "GNU General Public License for more details.\n\n"
+
+    "Please see additional license information in included documentation in"
+    "the same folder as this program."
     );
 }

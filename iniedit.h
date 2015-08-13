@@ -1,6 +1,8 @@
 #ifndef INIEDIT_H
 #define INIEDIT_H
 
+#include "orderedmap.h"
+
 #include <QString>
 #include <QFile>
 
@@ -14,25 +16,38 @@ public:
     bool fNonValueLine;
     QString sValue;
     QString sLine;
+
+    inline int operator==(Element &e) { return (this == &e); }
 };
 
-typedef OrderedMap<QString, Element> Section;
-typedef OrderedMap<QString, Section> SectionMap;
-typedef SectionMap::iterator SectionIterator;
 typedef OrderedMap<QString, Element> ElementMap;
 typedef ElementMap::iterator ElementIterator;
+typedef ElementMap::const_iterator ConstElementIterator;
 
+class Section : public ElementMap
+{
+public:
+    Section() {}
+    ~Section() {}
+
+    const QString getValue(const QString &key);
+    const QString getValue(const QString &key, const QString &sDefault);
+};
+
+typedef OrderedMap<QString, Section> SectionMap;
+typedef SectionMap::iterator SectionIterator;
 
 class IniEditor
 {
 public:
-    IniEditor() {};
-    ~IniEditor() {};
+    IniEditor() {}
+    ~IniEditor() {}
 
+    void clear(void);
     bool read(QString sPathname);
     QFileDevice::FileError error() {return fe;}
 
-    Section section(QString s) {return msect[s];}
+    Section &section(QString s) {return msect[s];}
     void dump(void);
 
 private:

@@ -1,11 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "iniedit.h"
+
 #include <QMainWindow>
 
 namespace Ui {
 class MainWindow;
 }
+
+class QComboBox;
 
 class MainWindow : public QMainWindow
 {
@@ -22,10 +26,13 @@ private slots:
     void on_tbtnInputGcode_clicked();
     void on_btnTranslate_clicked();
     void on_about();
+    void refreshFromIni(IniEditor &ie);
+    void populateMachineType(QComboBox &combo);
 
 private:
     Ui::MainWindow *ui;
     int heightCollapsed;
+    IniEditor ie;
 };
 
 #endif // MAINWINDOW_H

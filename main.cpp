@@ -6,6 +6,7 @@
 #include <QtGui>
 #include <QSplashScreen>
 #include <QTextStream>
+#include <QStandardPaths>
 
 QTextStream &qStdout()
 {
@@ -21,6 +22,14 @@ int main(int argc, char *argv[])
     a.setOrganizationName("MarkWal");
     a.setOrganizationDomain("markwal.github.io");
     a.setApplicationName("GpxUi");
+
+    // set the current working directory to where gpx.ini belongs
+    QDir dir;
+#ifdef Q_OS_WIN
+    dir.cd(a.applicationDirPath());
+#else // !Q_OS_WIN
+    dir.cd(QStandardPaths::HomeLocation());
+#endif // !Q_OS_WIN
 //    QSplashScreen splash;
 //    splash.show();
 /*

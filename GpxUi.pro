@@ -23,7 +23,8 @@ HEADERS  += mainwindow.h \
     rungpx.h \
     orderedmap.h \
     build/version.h \
-    inih/ini.h
+    inih/ini.h \
+    iniedit.h
 
 FORMS    += mainwindow.ui \
     rungpx.ui
