@@ -1,41 +1,52 @@
 #ifndef INIEDIT_H
 #define INIEDIT_H
 
-#include "orderedmap.h"
-
 #include <QString>
+#include <QLinkedList>
+#include <QMap>
 #include <QFile>
 
-class Element
+class Line
 {
 public:
-    Element() {}
-    Element(bool fNonValueLine, QString sValue, QString sLine):
-        fNonValueLine(fNonValueLine), sValue(sValue), sLine(sLine) {}
+    Line() {}
+    Line(bool fHasProperty, int iline, QString sName, QString sValue, QString sLine):
+        fHasProperty(fHasProperty), iline(iline), sName(sName), sValue(sValue), sLine(sLine) {}
 
-    bool fNonValueLine;
+    bool fHasProperty;
+    int iline;
+    QString sName;
     QString sValue;
     QString sLine;
 
-    inline int operator==(Element &e) { return (this == &e); }
+    inline int operator==(Line &e) { return (this == &e); }
 };
 
-typedef OrderedMap<QString, Element> ElementMap;
-typedef ElementMap::iterator ElementIterator;
-typedef ElementMap::const_iterator ConstElementIterator;
+typedef QLinkedList<Line> LineList;
+typedef LineList::iterator LineIterator;
+typedef LineList::const_iterator ConstLineIterator;
+typedef QMap<QString, LineIterator> LineIndex;
 
-class Section : public ElementMap
+class Section
 {
 public:
     Section() {}
     ~Section() {}
 
-    const QString getValue(const QString &key);
-    const QString getValue(const QString &key, const QString &sDefault);
+    void insert(const QString &sPropertyName, LineIterator il);
+    const Line &getLine(const QString &sPropertyName);
+
+    const QString value(const QString &sPropertyName) const;
+    const QString value(const QString &sPropertyName, const QString &sDefault) const;
+    inline const QString operator[](const QString &sPropertyName) const { return value(sPropertyName); }
+
+    void dump() const;
+
+private:
+    LineIndex li;
 };
 
-typedef OrderedMap<QString, Section> SectionMap;
-typedef SectionMap::iterator SectionIterator;
+typedef QMap<QString, Section> SectionIndex;
 
 class IniEditor
 {
@@ -43,24 +54,31 @@ public:
     IniEditor() {}
     ~IniEditor() {}
 
-    void clear(void);
-    bool read(QString sPathname);
+    typedef bool (*ParserCallback)(void *user, QString &sSection, Line &line);
+
+    void clear();
+    bool read(QString sPathname, ParserCallback pc, void *user);
     QFileDevice::FileError error() {return fe;}
 
-    Section &section(QString s) {return msect[s];}
-    void dump(void);
+    const Section &section(QString s) {return si[s];}
+    void dump() const;
 
 private:
-    SectionMap msect;
+    SectionIndex si;
+    LineList ll;
+
     QFileDevice::FileError fe;
     QFile fileParsing;
     char *szLineParsing;
     int ilineParsing;
     QString sSectionParsing;
+    ParserCallback parserCallback;
+    void *user;
 
-public: // not really though
     char *parserReader(char *szBuffer, int cbBuffer);
     int parserHandler(const char *szSection, const char *szName, const char *szValue);
+    static char *inihReader(char *szBuffer, int cbBuffer, void *user);
+    static int inihHandler(void *user, const char *szSection, const char *szName, const char *szValue);
 };
 
 #endif // INIEDIT_H

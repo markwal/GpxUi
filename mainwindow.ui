@@ -2,16 +2,8 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>385</width>
-    <height>461</height>
-   </rect>
-  </property>
   <property name="windowTitle">
-   <string>GPX Gcode to X3g Converter</string>
+   <string>GPX - Gcode to X3g Converter</string>
   </property>
   <property name="windowIcon">
    <iconset resource="gpxui.qrc">
@@ -73,22 +65,25 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item row="4" column="0" colspan="2">
-        <widget class="QWidget" name="widgetSettingsButtons" native="true">
-         <layout class="QHBoxLayout" name="layoutSettingsButtons">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-         </layout>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="btnSave">
+         <property name="text">
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btnReload">
+         <property name="text">
+          <string>Reload</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="btnDefaults">
+         <property name="text">
+          <string>Restore Defaults</string>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">
@@ -107,25 +102,35 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="btnDefaults">
-         <property name="text">
-          <string>Restore Defaults</string>
+       <item row="2" column="1" colspan="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="btnReload">
-         <property name="text">
-          <string>Reload</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="btnSave">
-         <property name="text">
-          <string>Save</string>
-         </property>
+       <item row="3" column="0" colspan="2">
+        <widget class="QWidget" name="widgetSettingsButtons" native="true">
+         <layout class="QHBoxLayout" name="layoutSettingsButtons">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+         </layout>
         </widget>
        </item>
        <item row="0" column="0" colspan="3">
@@ -153,84 +158,14 @@
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>10</number>
+             <number>0</number>
             </property>
             <property name="maxVisibleItems">
              <number>15</number>
             </property>
             <item>
              <property name="text">
-              <string>Cupcake Gen3 XYZ, Mk5/6 + Gen4 Extruder</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Cupcake Gen4 XYZ, Mk5/6 + Gen4 Extruder</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Cupcake Pololu XYZ, Mk5/6 + Gen4 Extruder</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Cupcake Pololu XYZ, Mk5/6 + Pololu Extruder</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Core-XY with HBP - single extruder</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Core-XY with HBP - single extruder, slow Z</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Clone R1 Single with HBP</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Clone R1 Dual with HBP</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Replicator 1 - single extruder</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Replicator 1 - dual extruder</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
               <string>Replicator 2</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Replicator 2 with HBP</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Replicator 2X</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ZYYX - single extruder</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ZYYX - dual extruder</string>
              </property>
             </item>
            </widget>
@@ -238,7 +173,7 @@
           <item row="1" column="0" alignment="Qt::AlignRight">
            <widget class="QLabel" name="labelGcodeFlavor">
             <property name="text">
-             <string>Gcode flavor:</string>
+             <string>Slicer gcode flavor:</string>
             </property>
            </widget>
           </item>
@@ -257,7 +192,7 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QToolButton" name="toolButton_5">
+           <widget class="QToolButton" name="tbMachineEditor">
             <property name="text">
              <string>...</string>
             </property>
@@ -266,22 +201,30 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="1" colspan="2">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="widgetAdvanced" native="true">
+      <layout class="QGridLayout" name="glAdvanced">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="gbPrint">
+         <property name="title">
+          <string>Print</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="0" colspan="3">
-        <widget class="QWidget" name="widgetAdvanced" native="true">
-         <layout class="QFormLayout" name="formLayout_2">
+         <layout class="QFormLayout" name="formLayout">
           <property name="labelAlignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
@@ -318,7 +261,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="labelNominal">
             <property name="text">
-             <string>Nominal filament width:</string>
+             <string>Slicer filament width (mm)</string>
             </property>
            </widget>
           </item>
@@ -361,15 +304,15 @@
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="labelActual">
+           <widget class="QLabel" name="labelHBPTemp">
             <property name="text">
-             <string>Actual filament width:</string>
+             <string>HBP temp override: (°C)</string>
             </property>
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QWidget" name="widgetActual" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <widget class="QWidget" name="widgetHBP" native="true">
+            <layout class="QHBoxLayout" name="hboxHBP">
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -383,62 +326,17 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QDoubleSpinBox" name="dsbActual">
-               <property name="singleStep">
-                <double>0.010000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="hsActual">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="labelDensity">
-            <property name="text">
-             <string>Packing density:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QWidget" name="widgetDensity" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QDoubleSpinBox" name="dsbDensity">
-               <property name="decimals">
-                <number>1</number>
+              <widget class="QSpinBox" name="sbHBP">
+               <property name="suffix">
+                <string> °C</string>
                </property>
                <property name="maximum">
-                <double>200.000000000000000</double>
+                <number>500</number>
                </property>
               </widget>
              </item>
              <item>
-              <spacer name="hsDensity">
+              <spacer name="hsHBPTemp">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -456,21 +354,204 @@
          </layout>
         </widget>
        </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="gbLeft">
+         <property name="title">
+          <string>Left</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelLeftActual">
+            <property name="text">
+             <string>Actual filament width (mm)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QWidget" name="widgetActual" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QDoubleSpinBox" name="dsbLeftActual">
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelLeftDensity">
+            <property name="text">
+             <string>Packing density</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QWidget" name="widgetLeftDensity" native="true">
+            <layout class="QHBoxLayout" name="hlLeftDensity">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QDoubleSpinBox" name="dsbLeftDensity">
+               <property name="decimals">
+                <number>2</number>
+               </property>
+               <property name="maximum">
+                <double>2.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelLeftTemp">
+            <property name="text">
+             <string>Temperature override (°C)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="sbLeftTemp">
+            <property name="suffix">
+             <string> °C</string>
+            </property>
+            <property name="maximum">
+             <number>500</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="labelLeftStandby">
+            <property name="text">
+             <string>Standby temperature (°C)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="sbLeftStandby">
+            <property name="suffix">
+             <string> °C</string>
+            </property>
+            <property name="maximum">
+             <number>500</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="gbRight">
+         <property name="title">
+          <string>Right</string>
+         </property>
+         <layout class="QFormLayout" name="flRight">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelRightActual">
+            <property name="text">
+             <string>Actual filament width (mm)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="dsbRightActual">
+            <property name="singleStep">
+             <double>0.010000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelRightDensity">
+            <property name="text">
+             <string>Packing density</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="dsbRightDensity">
+            <property name="decimals">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <double>2.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.010000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelRightTemp">
+            <property name="text">
+             <string>Temperature override (°C)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="sbRightTemp">
+            <property name="suffix">
+             <string> °C</string>
+            </property>
+            <property name="maximum">
+             <number>500</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="labelRightStandby">
+            <property name="text">
+             <string>Standby temperature (°C)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="sbRightStandby">
+            <property name="suffix">
+             <string> °C</string>
+            </property>
+            <property name="maximum">
+             <number>500</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>0</height>
-       </size>
-      </property>
-     </spacer>
     </item>
    </layout>
   </widget>
@@ -479,7 +560,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>385</width>
+     <width>448</width>
      <height>21</height>
     </rect>
    </property>

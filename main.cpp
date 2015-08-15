@@ -23,13 +23,6 @@ int main(int argc, char *argv[])
     a.setOrganizationDomain("markwal.github.io");
     a.setApplicationName("GpxUi");
 
-    // set the current working directory to where gpx.ini belongs
-    QDir dir;
-#ifdef Q_OS_WIN
-    dir.cd(a.applicationDirPath());
-#else // !Q_OS_WIN
-    dir.cd(QStandardPaths::HomeLocation());
-#endif // !Q_OS_WIN
 //    QSplashScreen splash;
 //    splash.show();
 /*
@@ -65,8 +58,8 @@ int main(int argc, char *argv[])
 
     IniEditor ie;
 
-    ie.read("C:/cyg/home/markw/GpxUi/GPX/gpx.ini");
-    qStdout() << ie.section("printer")["machine_type"].sValue << endl;
+    ie.read("C:/cyg/home/markw/GpxUi/GPX/gpx.ini", NULL, NULL);
+    qStdout() << ie.section("printer")["machine_type"] << endl;
 
     ie.dump();
 

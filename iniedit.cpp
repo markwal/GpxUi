@@ -1,6 +1,5 @@
 #include <errno.h>
 
-#include "orderedmap.h"
 #include "iniedit.h"
 
 extern "C" {
@@ -13,13 +12,15 @@ extern "C" {
 #include <QTextStream>
 QTextStream &qStdout();
 
-static char *inihReader(char *szBuffer, int cbBuffer, void *user)
+// readline callback for inih, turn a C callback into a C++ method call
+char *IniEditor::inihReader(char *szBuffer, int cbBuffer, void *user)
 {
     IniEditor *pie = (IniEditor *)user;
     return pie->parserReader(szBuffer, cbBuffer);
 }
 
-static int inihHandler(void *user, const char *szSection, const char *szName, const char *szValue)
+// parser callback for inih, turn a C callback into a C++ method call
+int IniEditor::inihHandler(void *user, const char *szSection, const char *szName, const char *szValue)
 {
     IniEditor *pie = (IniEditor *)user;
     return pie->parserHandler(szSection, szName, szValue);
@@ -34,32 +35,43 @@ char *IniEditor::parserReader(char *szBuffer, int cbBuffer)
     if (cb == 0)
         return NULL;
 
-    msect[sSectionParsing].append(QString("_ln_%1").arg(++ilineParsing), Element(true, QString(), szLineParsing));
+    ll.append(Line(false, ll.count(), QString(), QString(), szLineParsing));
     return szBuffer;
 }
 
 int IniEditor::parserHandler(const char *szSection, const char *szName, const char *szValue)
 {
     QString sSection(szSection);
-    msect[sSectionParsing].remove(QString("_ln_%1").arg(ilineParsing)); // remove the provisional
-    sSectionParsing = sSection;
-    if (szName[0])
-        msect[sSectionParsing].append(szName, Element(false, szValue, szLineParsing));
+    if (sSectionParsing != sSection)
+        sSectionParsing = sSection;
+    if (szName[0]) {
+        LineIterator iline = ll.end();
+        iline--;
+        iline->fHasProperty = true;
+        QString s(szName);
+        iline->sName = s;
+        iline->sValue = szValue;
+        if (parserCallback != NULL)
+            parserCallback(user, sSectionParsing, *iline);
+        si[sSectionParsing].insert(iline->sName, iline);
+    }
     return true;
 }
 
-void IniEditor::clear(void)
+void IniEditor::clear()
 {
-    msect.clear();
+    si.clear();
     fe = QFileDevice::NoError;
 }
 
-bool IniEditor::read(QString sPathname)
+bool IniEditor::read(QString sPathname, ParserCallback pc = NULL, void *user = NULL)
 {
     clear();
     szLineParsing = NULL;
     ilineParsing = 0;
     sSectionParsing = ""; // fake section for front matter before first section
+    parserCallback = pc;
+    this->user = user;
 
     fileParsing.setFileName(sPathname);
     if (!fileParsing.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -67,8 +79,8 @@ bool IniEditor::read(QString sPathname)
         return false;
     }
 
-    int lnError = ini_parse_stream(inihReader, this, inihHandler, this);
-    if (lnError < 0) {
+    int iline = ini_parse_stream(inihReader, this, inihHandler, this);
+    if (iline < 0) {
         return false;
     }
     // ignore parsing errors, allow editing of the rest, is that correct?
@@ -77,28 +89,38 @@ bool IniEditor::read(QString sPathname)
     return true;
 }
 
-void IniEditor::dump(void)
+void Section::dump() const
 {
-    for (SectionIterator is = msect.begin(); is != msect.end(); is++) {
-        qStdout() << "[" << is.key() << "]" << endl;
-        for (ElementIterator ie = is.value().begin(); ie != is.value().end(); ie++) {
-            Element &e = ie.value();
-            if (e.fNonValueLine)
-                qStdout() << e.sLine;
-            else
-                qStdout() << ie.key() << "=" << e.sValue << endl;
-        }
+    for (LineIndex::const_iterator il = li.constBegin(); il != li.constEnd(); il++) {
+        qStdout() << il.value()->sName << "=" << il.value()->sValue << endl;
     }
 }
 
-const QString Section::getValue(const QString &key)
+void IniEditor::dump() const
 {
-    ConstElementIterator ie = constFind(key);
-    return (ie == constEnd()) ? QString::null : ie.value().sValue;
+    for (SectionIndex::const_iterator is = si.constBegin(); is != si.constEnd(); is++) {
+        qStdout() << "[" << is.key() << "]" << endl;
+        is.value().dump();
+    }
+
+    for (ConstLineIterator il = ll.constBegin(); il != ll.constEnd(); il++ ) {
+        qStdout() << il->sLine;
+    }
+    qStdout() << endl;
 }
 
-const QString Section::getValue(const QString &key, const QString &sDefault)
+void Section::insert(const QString &sPropertyName, LineIterator il)
 {
-    ConstElementIterator ie = constFind(key);
-    return (ie == constEnd()) ? sDefault : ie.value().sValue;
+    li.insert(sPropertyName, il);
+}
+
+const QString Section::value(const QString &sPropertyName, const QString &sDefault) const
+{
+    LineIndex::const_iterator il = li.constFind(sPropertyName);
+    return (il == li.constEnd()) ? sDefault : il.value()->sValue;
+}
+
+const QString Section::value(const QString &sPropertyName) const
+{
+    return value(sPropertyName, QString::null);
 }

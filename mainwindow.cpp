@@ -1,16 +1,23 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "rungpx.h"
+#include "machineeditor.h"
 #include "build/version.h"
 
 #include <QFileDialog>
 #include <QDebug>
 #include <QMessageBox>
 #include <QSettings>
+#include <QApplication>
 
+QTextStream &qStdout();
+
+// Ini file goes where GPX expects to find it
 #ifdef Q_OS_WIN
+#define INILOCATION() (QApplication::instance()->applicationDirPath())
 #define INIFILENAME_PREFIX ""
 #else
+#define INILOCATION() (QStandardPaths::HomeLocation());
 #define INIFILENAME_PREFIX "."
 #endif
 
@@ -22,14 +29,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     populateMachineType(*ui->comboMachineType);
     setAdvanced(false);
-    resize(sizeHint());
+    heightCollapsed = sizeHint().height();
+    setFixedHeight(heightCollapsed);
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(on_about()));
 
+    sSectionCur = QString();
+    QDir dir(INILOCATION());
     QString sFilename = INIFILENAME_PREFIX "gpxui.ini";
-    QFileInfo fi(sFilename);
+    QFileInfo fi(dir.absoluteFilePath(sFilename));
     if (fi.exists())
-        ie.read(sFilename);
+        ie.read(fi.absoluteFilePath(), iniEditorParserCallback, this);
     else
         ie.clear();
 
@@ -41,15 +51,46 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+bool MainWindow::iniEditorParserCallback(void *user, QString &sSection, Line &line)
+{
+    MainWindow *pmw = (MainWindow *)user;
+
+    // translate some synonyms to the canonical names for the index/retrieval
+    if (sSection != pmw->sSectionCur) {
+        sSection = sSection.toLower();
+        if (sSection == "slicer")
+            sSection = "printer";
+        pmw->sSectionCur = sSection;
+    }
+    line.sName = line.sName.toLower();
+    if (line.sName == "nominal_filament_diameter" || line.sName == "filament_diameter")
+        line.sName = "slicer_filament_diameter";
+    if (sSection == "machine" && line.sName == "slicer_filament_diameter")
+        sSection = "printer";
+    if (line.sName == "nozzle_temperature")
+        line.sName = "active_temperature";
+    line.sValue = line.sValue.toLower();
+    return true;
+}
+
 void MainWindow::setAdvanced(bool isAdvanced)
 {
     ui->widgetAdvanced->setHidden(!isAdvanced);
     ui->btnAdvancedToggle->setText(isAdvanced ? tr("Advanced <<") : tr("Advanced >>"));
+    if (heightCollapsed)
+        setFixedHeight(isAdvanced ? sizeHint().height() : heightCollapsed);
 }
 
 void MainWindow::on_btnAdvancedToggle_clicked()
 {
     setAdvanced(ui->widgetAdvanced->isHidden());
+}
+
+void MainWindow::on_tbMachineEditor_clicked()
+{
+    MachineEditor me;
+
+    me.exec();
 }
 
 void MainWindow::on_tbtnInputGcode_clicked()
@@ -117,16 +158,31 @@ void MainWindow::refreshFromIni(IniEditor &ie)
 {
     // main
     Section sect = ie.section("printer");
-    int imt = ui->comboMachineType->findData(sect.getValue("machine_type", "r2"));
+    QString s = sect.value("machine_type", "r2");
+    int imt = ui->comboMachineType->findData(s);
     if (imt != -1)
         ui->comboMachineType->setCurrentIndex(imt);
-    QString s = sect.getValue("reprap_flavor", "reprap");
+    s = sect.value("gcode_flavor", "reprap");
     ui->comboGcodeFlavor->setCurrentIndex(s.compare("makerbot", Qt::CaseInsensitive) == 0);
 
     // advanced
-    ui->cboxProgress->setChecked(sect.getValue("build_progress", "1").toInt());
-    ui->cboxDitto->setChecked(sect.getValue("ditto_printing", "0").toInt());
-    ui->cboxRecalc->setChecked(sect.getValue("recalculate_5d", "0").toInt());
+    ui->cboxProgress->setChecked(sect.value("build_progress", "1").toInt());
+    ui->cboxDitto->setChecked(sect.value("ditto_printing", "0").toInt());
+    ui->cboxRecalc->setChecked(sect.value("recalculate_5d", "0").toInt());
+    ui->dsbNominal->setValue(sect.value("slicer_filament_diameter", "0").toDouble());
+    ui->sbHBP->setValue(sect.value("build_platform_temperature", "0").toInt());
+
+    sect = ie.section("left");
+    ui->dsbLeftActual->setValue(sect.value("actual_filament_diameter", "0").toDouble());
+    ui->dsbLeftDensity->setValue(sect.value("packing_density", "0").toDouble());
+    ui->sbLeftTemp->setValue(sect.value("active_temperature", "0").toInt());
+    ui->sbLeftStandby->setValue(sect.value("standby_temperature", "0").toInt());
+
+    sect = ie.section("right");
+    ui->dsbRightActual->setValue(sect.value("actual_filament_diameter", "0").toDouble());
+    ui->dsbRightDensity->setValue(sect.value("packing_density", "0").toDouble());
+    ui->sbRightTemp->setValue(sect.value("active_temperature", "0").toInt());
+    ui->sbRightStandby->setValue(sect.value("standby_temperature", "0").toInt());
 }
 
 void MainWindow::on_about()
@@ -158,7 +214,6 @@ void MainWindow::on_about()
     "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
     "GNU General Public License for more details.\n\n"
 
-    "Please see additional license information in included documentation in"
-    "the same folder as this program."
+    "Please see additional license information in the documentation distributed with this program.\n"
     );
 }

@@ -16,18 +16,20 @@ DEFINES += NOTIFY_SECTION_CHANGE=1
 SOURCES += main.cpp\
         mainwindow.cpp \
     rungpx.cpp \
+    inih/ini.c \
     iniedit.cpp \
-    inih/ini.c
+    machineeditor.cpp
 
 HEADERS  += mainwindow.h \
     rungpx.h \
-    orderedmap.h \
     build/version.h \
     inih/ini.h \
-    iniedit.h
+    iniedit.h \
+    machineeditor.h
 
 FORMS    += mainwindow.ui \
-    rungpx.ui
+    rungpx.ui \
+    machineeditor.ui
 
 DISTFILES += \
     gpxui.rc
