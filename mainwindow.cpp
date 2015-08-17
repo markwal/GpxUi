@@ -1,3 +1,4 @@
+#include "main.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "rungpx.h"
@@ -9,17 +10,6 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QApplication>
-
-QTextStream &qStdout();
-
-// Ini file goes where GPX expects to find it
-#ifdef Q_OS_WIN
-#define INILOCATION() (QApplication::instance()->applicationDirPath())
-#define INIFILENAME_PREFIX ""
-#else
-#define INILOCATION() (QStandardPaths::HomeLocation());
-#define INIFILENAME_PREFIX "."
-#endif
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,17 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setFixedHeight(heightCollapsed);
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(on_about()));
+    connect(ui->actionAbout_Qt, SIGNAL(triggered()), QApplication::instance(), SLOT(aboutQt()));
 
-    sSectionCur = QString();
-    QDir dir(INILOCATION());
-    QString sFilename = INIFILENAME_PREFIX "gpxui.ini";
-    QFileInfo fi(dir.absoluteFilePath(sFilename));
-    if (fi.exists())
-        ie.read(fi.absoluteFilePath(), iniEditorParserCallback, this);
-    else
-        ie.clear();
-
-    refreshFromIni(ie);
+    on_btnReload_clicked();
 }
 
 MainWindow::~MainWindow()
@@ -88,12 +70,12 @@ void MainWindow::on_btnAdvancedToggle_clicked()
 
 void MainWindow::on_tbMachineEditor_clicked()
 {
-    MachineEditor me;
+    MachineEditor me(this, ui->comboMachineType->currentData().toString());
 
     me.exec();
 }
 
-void MainWindow::on_tbtnInputGcode_clicked()
+bool MainWindow::chooseInputFile()
 {
     QSettings settings;
 
@@ -108,25 +90,52 @@ void MainWindow::on_tbtnInputGcode_clicked()
             dir.setPath(s);
     }
 
-    s = QFileDialog::getOpenFileName(this, tr("Choose Gcode File"), dir.cleanPath(dir.absolutePath()), tr("Gcode (*.gcode *.gco *.g)"));
+    s = QFileDialog::getOpenFileName(this, tr("Choose Input Gcode File"), dir.cleanPath(dir.absolutePath()), tr("Gcode (*.gcode *.gco *.g)"));
+
+    if (s.isEmpty())
+        return false; // user cancelled
 
     // Save the most recent folder in settings
-    if (!s.isEmpty()) {
-        settings.setValue("mostRecentFolder", QFileInfo(s).path());
-        ui->editInput->setText(s);
-    }
+    settings.setValue("mostRecentFolder", QFileInfo(s).path());
+    ui->editInput->setText(s);
+    return true;
+}
+
+void MainWindow::on_tbtnInputGcode_clicked()
+{
+    chooseInputFile();
 }
 
 void MainWindow::on_btnTranslate_clicked()
 {
+    if (ui->editInput->text().isEmpty()) {
+        if (!chooseInputFile())
+            return;
+    }
+
     QFileInfo fi(ui->editInput->text());
+    while (!fi.exists()) {
+        QMessageBox msgbox(this);
+        msgbox.setText("Unable to find the input file.");
+        msgbox.setInformativeText("Would you like to choose another?");
+        msgbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        int ret = msgbox.exec();
+        if (ret != QMessageBox::Ok)
+            return;
+        if (!chooseInputFile())
+            return;
+        fi.setFile(ui->editInput->text());
+    }
+
     QDir dir(ui->editInput->text());
     QString sDefaultFileName = dir.absoluteFilePath(fi.completeBaseName() + ".x3g");
 
-    QString sFileName = QFileDialog::getSaveFileName(this, tr("X3g Output File"),
+    QString sFileName = QFileDialog::getSaveFileName(this, tr("Choose X3g Output File"),
         sDefaultFileName, tr("X3g (*.x3g *.s3g)"));
     if (sFileName.isEmpty())
         return; // user cancelled
+
+    saveToIni();
 
     RunGpx rungpx;
     rungpx.Translate(ui->editInput->text(), sFileName);
@@ -154,35 +163,108 @@ void MainWindow::populateMachineType(QComboBox &combo)
     combo.insertItem(imtMax, "ZYYX - dual extruder", "zd");
 }
 
-void MainWindow::refreshFromIni(IniEditor &ie)
+void MainWindow::on_btnReload_clicked()
+{
+    sSectionCur = QString();
+    const QDir &dir = GpxUiInfo::iniLocation();
+    QString sFilename = INIFILENAME_PREFIX "gpx.ini";
+    QFileInfo fi(dir.absoluteFilePath(sFilename));
+    ie.setFilename(fi.absoluteFilePath());
+    if (fi.exists())
+        ie.read(iniEditorParserCallback, this);
+    else
+        ie.clear();
+
+    refreshFromIni();
+}
+
+void MainWindow::on_btnSave_clicked()
+{
+    saveToIni();
+}
+
+void MainWindow::refreshFromIni()
 {
     // main
-    Section sect = ie.section("printer");
-    QString s = sect.value("machine_type", "r2");
-    int imt = ui->comboMachineType->findData(s);
+    Section *psect = &ie.section("printer");
+    int imt = ui->comboMachineType->findData(psect->value("machine_type", "r2"));
     if (imt != -1)
         ui->comboMachineType->setCurrentIndex(imt);
-    s = sect.value("gcode_flavor", "reprap");
-    ui->comboGcodeFlavor->setCurrentIndex(s.compare("makerbot", Qt::CaseInsensitive) == 0);
+    ui->comboGcodeFlavor->setCurrentIndex(psect->value("gcode_flavor", "reprap").compare("makerbot", Qt::CaseInsensitive) == 0);
 
     // advanced
-    ui->cboxProgress->setChecked(sect.value("build_progress", "1").toInt());
-    ui->cboxDitto->setChecked(sect.value("ditto_printing", "0").toInt());
-    ui->cboxRecalc->setChecked(sect.value("recalculate_5d", "0").toInt());
-    ui->dsbNominal->setValue(sect.value("slicer_filament_diameter", "0").toDouble());
-    ui->sbHBP->setValue(sect.value("build_platform_temperature", "0").toInt());
+    ui->cboxProgress->setChecked(psect->value("build_progress", "1").toInt());
+    ui->cboxDitto->setChecked(psect->value("ditto_printing", "0").toInt());
+    ui->cboxRecalc->setChecked(psect->value("recalculate_5d", "0").toInt());
+    ui->dsbNominal->setValue(psect->value("slicer_filament_diameter", "0").toDouble());
+    ui->sbHBP->setValue(psect->value("build_platform_temperature", "0").toInt());
 
-    sect = ie.section("left");
-    ui->dsbLeftActual->setValue(sect.value("actual_filament_diameter", "0").toDouble());
-    ui->dsbLeftDensity->setValue(sect.value("packing_density", "0").toDouble());
-    ui->sbLeftTemp->setValue(sect.value("active_temperature", "0").toInt());
-    ui->sbLeftStandby->setValue(sect.value("standby_temperature", "0").toInt());
+    psect = &ie.section("left");
+    ui->dsbLeftActual->setValue(psect->value("actual_filament_diameter", "0").toDouble());
+    ui->dsbLeftDensity->setValue(psect->value("packing_density", "0").toDouble());
+    ui->sbLeftTemp->setValue(psect->value("active_temperature", "0").toInt());
+    ui->sbLeftStandby->setValue(psect->value("standby_temperature", "0").toInt());
 
-    sect = ie.section("right");
-    ui->dsbRightActual->setValue(sect.value("actual_filament_diameter", "0").toDouble());
-    ui->dsbRightDensity->setValue(sect.value("packing_density", "0").toDouble());
-    ui->sbRightTemp->setValue(sect.value("active_temperature", "0").toInt());
-    ui->sbRightStandby->setValue(sect.value("standby_temperature", "0").toInt());
+    psect = &ie.section("right");
+    ui->dsbRightActual->setValue(psect->value("actual_filament_diameter", "0").toDouble());
+    ui->dsbRightDensity->setValue(psect->value("packing_density", "0").toDouble());
+    ui->sbRightTemp->setValue(psect->value("active_temperature", "0").toInt());
+    ui->sbRightStandby->setValue(psect->value("standby_temperature", "0").toInt());
+}
+
+void MainWindow::saveToIni()
+{
+    // main
+    Section *psect = &ie.section("printer");
+    psect->setValue("machine_type", ui->comboMachineType->currentData().toString());
+    psect->setValue("gcode_flavor", ui->comboGcodeFlavor->currentIndex() ? "makerbot" : "reprap", "reprap");
+
+    // advanced
+    psect->setValue("build_progress", ui->cboxProgress->isChecked(), 1);
+    psect->setValue("ditto_printing", ui->cboxDitto->isChecked(), 0);
+    psect->setValue("recalculate_5d", ui->cboxRecalc->isChecked(), 0);
+    psect->setValue("slicer_filament_diameter", ui->dsbNominal->value(), 0.0);
+    psect->setValue("build_platform_temperature", ui->sbHBP->value(), 0);
+
+    psect = &ie.section("left");
+    psect->setValue("actual_filament_diameter", ui->dsbLeftActual->value(), 0.0);
+    psect->setValue("packing_density", ui->dsbLeftDensity->value(), 0.0);
+    psect->setValue("active_temperature", ui->sbLeftTemp->value(), 0);
+    psect->setValue("standby_temperature", ui->sbLeftStandby->value(), 0);
+
+    psect = &ie.section("right");
+    psect->setValue("actual_filament_diameter", ui->dsbRightActual->value(), 0.0);
+    psect->setValue("packing_density", ui->dsbRightDensity->value(), 0.0);
+    psect->setValue("active_temperature", ui->sbRightTemp->value(), 0);
+    psect->setValue("standby_temperature", ui->sbRightStandby->value(), 0);
+
+    ie.write();
+}
+
+void MainWindow::on_btnDefaults_clicked()
+{
+    // main
+    int imt = ui->comboMachineType->findData("r2");
+    if (imt != -1)
+        ui->comboMachineType->setCurrentIndex(imt);
+    ui->comboGcodeFlavor->setCurrentIndex(0);
+
+    // advanced
+    ui->cboxProgress->setChecked(true);
+    ui->cboxDitto->setChecked(false);
+    ui->cboxRecalc->setChecked(false);
+    ui->dsbNominal->setValue(0.0);
+    ui->sbHBP->setValue(0);
+
+    ui->dsbLeftActual->setValue(0.0);
+    ui->dsbLeftDensity->setValue(0.0);
+    ui->sbLeftTemp->setValue(0);
+    ui->sbLeftStandby->setValue(0);
+
+    ui->dsbRightActual->setValue(0.0);
+    ui->dsbRightDensity->setValue(0.0);
+    ui->sbRightTemp->setValue(0);
+    ui->sbRightStandby->setValue(0);
 }
 
 void MainWindow::on_about()

@@ -27,8 +27,12 @@ private slots:
     void on_tbMachineEditor_clicked();
     void on_btnTranslate_clicked();
     void on_about();
-    void refreshFromIni(IniEditor &ie);
-    void populateMachineType(QComboBox &combo);
+
+    void on_btnDefaults_clicked();
+
+    void on_btnReload_clicked();
+
+    void on_btnSave_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -36,6 +40,10 @@ private:
     IniEditor ie;
     QString sSectionCur;
 
+    bool chooseInputFile();
+    void refreshFromIni();
+    void saveToIni();
+    void populateMachineType(QComboBox &combo);
     static bool iniEditorParserCallback(void *user, QString &sSection, Line &line);
 };
 

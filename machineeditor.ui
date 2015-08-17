@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>289</height>
+    <width>713</width>
+    <height>346</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -104,7 +104,13 @@
          </property>
          <item>
           <widget class="QSpinBox" name="sbExtruderCount">
+           <property name="minimum">
+            <number>1</number>
+           </property>
            <property name="maximum">
+            <number>2</number>
+           </property>
+           <property name="value">
             <number>2</number>
            </property>
           </widget>
@@ -125,10 +131,10 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label">
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="cboxHasHBP">
         <property name="text">
-         <string>Timeout</string>
+         <string>Has heated build platform</string>
         </property>
        </widget>
       </item>
@@ -168,6 +174,13 @@
           </spacer>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Timeout</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -222,7 +235,7 @@
          <item>
           <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>Max Feedrate</string>
+            <string>Max Feedrate (mm/min)</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -232,7 +245,7 @@
          <item>
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>Home Feedrate</string>
+            <string>Home Feedrate (mm/min)</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -295,24 +308,45 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbXMaxFeedrate"/>
+          <widget class="QDoubleSpinBox" name="dsbXMaxFeedrate">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <double>100000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbXHomeFeedrate"/>
+          <widget class="QDoubleSpinBox" name="dsbXHomeFeedrate">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <double>100000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="dsbXStepsPer"/>
+          <widget class="QDoubleSpinBox" name="dsbXStepsPer">
+           <property name="decimals">
+            <number>6</number>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QComboBox" name="cbXHome">
            <item>
             <property name="text">
-             <string>Max</string>
+             <string>Min</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Min</string>
+             <string>Max</string>
             </property>
            </item>
           </widget>
@@ -353,24 +387,45 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbYMaxFeedrate"/>
+          <widget class="QDoubleSpinBox" name="dsbYMaxFeedrate">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <double>100000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbYHomeFeedrate"/>
+          <widget class="QDoubleSpinBox" name="dsbYHomeFeedrate">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <double>100000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="dsbYStepsPer"/>
+          <widget class="QDoubleSpinBox" name="dsbYStepsPer">
+           <property name="decimals">
+            <number>6</number>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QComboBox" name="cbYHome">
            <item>
             <property name="text">
-             <string>Max</string>
+             <string>Min</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Min</string>
+             <string>Max</string>
             </property>
            </item>
           </widget>
@@ -411,24 +466,45 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbZMaxfeedrate"/>
+          <widget class="QDoubleSpinBox" name="dsbZMaxFeedrate">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <double>100000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbZHomeFeedrate"/>
+          <widget class="QDoubleSpinBox" name="dsbZHomeFeedrate">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <double>100000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="dsbZStepsPer"/>
+          <widget class="QDoubleSpinBox" name="dsbZStepsPer">
+           <property name="decimals">
+            <number>6</number>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QComboBox" name="cbZHome">
            <item>
             <property name="text">
-             <string>Max</string>
+             <string>Min</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Min</string>
+             <string>Max</string>
             </property>
            </item>
           </widget>
@@ -469,23 +545,40 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbAMaxFeedrate"/>
+          <widget class="QDoubleSpinBox" name="dsbAMaxFeedrate">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <double>100000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbAHomeFeedrate">
+          <widget class="QDoubleSpinBox" name="dsbAHomeFeedrate">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="suffix">
             <string> N/A</string>
            </property>
-           <property name="value">
+           <property name="decimals">
             <number>0</number>
+           </property>
+           <property name="value">
+            <double>0.000000000000000</double>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="dsbAStepsPer"/>
+          <widget class="QDoubleSpinBox" name="dsbAStepsPer">
+           <property name="decimals">
+            <number>31</number>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QComboBox" name="comboBox_4">
@@ -535,20 +628,37 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbBMaxFeedrate"/>
+          <widget class="QDoubleSpinBox" name="dsbBMaxFeedrate">
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <double>100000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="spinBox_4">
+          <widget class="QDoubleSpinBox" name="spinBox_4">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="suffix">
             <string> N/A</string>
            </property>
+           <property name="decimals">
+            <number>0</number>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="dsbBStepsPer"/>
+          <widget class="QDoubleSpinBox" name="dsbBStepsPer">
+           <property name="decimals">
+            <number>31</number>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QComboBox" name="comboBox_5">
@@ -593,6 +703,32 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>dsbNozzleDiameter</tabstop>
+  <tabstop>sbExtruderCount</tabstop>
+  <tabstop>sbTimeout</tabstop>
+  <tabstop>cboxHasHBP</tabstop>
+  <tabstop>dsbXMaxFeedrate</tabstop>
+  <tabstop>dsbXHomeFeedrate</tabstop>
+  <tabstop>dsbXStepsPer</tabstop>
+  <tabstop>cbXHome</tabstop>
+  <tabstop>dsbYMaxFeedrate</tabstop>
+  <tabstop>dsbYHomeFeedrate</tabstop>
+  <tabstop>dsbYStepsPer</tabstop>
+  <tabstop>cbYHome</tabstop>
+  <tabstop>dsbZMaxFeedrate</tabstop>
+  <tabstop>dsbZHomeFeedrate</tabstop>
+  <tabstop>dsbZStepsPer</tabstop>
+  <tabstop>cbZHome</tabstop>
+  <tabstop>dsbAMaxFeedrate</tabstop>
+  <tabstop>dsbAHomeFeedrate</tabstop>
+  <tabstop>dsbAStepsPer</tabstop>
+  <tabstop>comboBox_4</tabstop>
+  <tabstop>dsbBMaxFeedrate</tabstop>
+  <tabstop>spinBox_4</tabstop>
+  <tabstop>dsbBStepsPer</tabstop>
+  <tabstop>comboBox_5</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -602,8 +738,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>336</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -618,8 +754,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>336</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

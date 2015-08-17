@@ -25,7 +25,8 @@ HEADERS  += mainwindow.h \
     build/version.h \
     inih/ini.h \
     iniedit.h \
-    machineeditor.h
+    machineeditor.h \
+    main.h
 
 FORMS    += mainwindow.ui \
     rungpx.ui \

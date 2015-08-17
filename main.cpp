@@ -1,5 +1,5 @@
+#include "main.h"
 #include "mainwindow.h"
-#include "orderedmap.h"
 #include "iniedit.h"
 
 #include <QApplication>
@@ -14,6 +14,38 @@ QTextStream &qStdout()
     return ts;
 }
 
+namespace GpxUiInfo
+{
+    static QDir dirIni;
+    static QDir dirMachineIni;
+
+    void init()
+    {
+#ifdef Q_OS_WIN
+        dirIni.setPath(QApplication::instance()->applicationDirPath());
+        dirMachineIni = dirIni;
+#else
+        dirIniLocation.setPath(QStandardPaths::HomeLocation());
+        dirMachineIniLocation = dirIniLocation;
+        const char *sz = ".gpx";
+        if (!dirMachineIniLocation.cd(sz)) {
+            dirMachineIniLocation.mkdir(sz);
+            dirMachineIniLocation.cd(sz);
+        }
+#endif
+    }
+
+    const QDir &iniLocation()
+    {
+        return dirIni;
+    }
+
+    const QDir &machineIniLocation()
+    {
+        return dirMachineIni;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     QApplication::setStyle("Fusion");
@@ -22,6 +54,7 @@ int main(int argc, char *argv[])
     a.setOrganizationName("MarkWal");
     a.setOrganizationDomain("markwal.github.io");
     a.setApplicationName("GpxUi");
+    GpxUiInfo::init();
 
 //    QSplashScreen splash;
 //    splash.show();
@@ -44,25 +77,6 @@ int main(int argc, char *argv[])
         s.exec();
     }
 */
-    OrderedMap<QString, QString> om;
-    om.append("key1", "value1");
-    om.append("key2", "value2");
-    om.append("key3", "value3");
-    qStdout() << om["key1"] << endl;
-    qStdout() << om["key3"] << endl;
-
-    OrderedMap<QString, QString>::iterator i = om.begin();
-    for (;i != om.end();i++) {
-        qStdout() << i.key() << "=" << i.value() << endl;
-    }
-
-    IniEditor ie;
-
-    ie.read("C:/cyg/home/markw/GpxUi/GPX/gpx.ini", NULL, NULL);
-    qStdout() << ie.section("printer")["machine_type"] << endl;
-
-    ie.dump();
-
     MainWindow w;
     w.show();
 
