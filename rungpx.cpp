@@ -1,6 +1,7 @@
 #include "rungpx.h"
 #include "ui_rungpx.h"
 
+#include <QDir>
 #include <QProcess>
 #include <QMessageBox>
 #include <QPushButton>
@@ -57,7 +58,8 @@ void RunGpx::ReadStdOut()
 
 void RunGpx::Translate(const QString& sInputName, const QString& sOutputName)
 {
-    QString sApp = QLatin1String("gpx.exe");
+    QDir dir(QApplication::instance()->applicationDirPath());
+    QString sApp = dir.absoluteFilePath(QLatin1String("gpx.exe"));
     QStringList slArgs;
     slArgs << QLatin1String("-v") << sInputName << sOutputName;
 

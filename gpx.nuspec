@@ -9,7 +9,7 @@
     <projectUrl>http://github.com/markwal/GpxUi</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/markwal/GpxUi/master/gpx.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>GPX is a post processing utility for converting gcode output from 3D slicing software to x3g files for standalone 3D printing on Makerbot printers.</description>
+    <description>GPX converts .gcode to .x3g for 3d printing</description>
     <copyright>Copyright 2013-2015, portions copyright 2008, all rights reserved</copyright>
     <tags>gcode x3g makerbot</tags>
   </metadata>
