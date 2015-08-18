@@ -34,6 +34,8 @@ RunGpx::~RunGpx()
         pprocess->terminate();
         pprocess->waitForFinished(3000);
     }
+    delete pprocess;
+    pprocess = NULL;
     delete ui;
 }
 
@@ -45,7 +47,7 @@ void RunGpx::DelayReadStdOut()
         ptimer->start(10);
     }
     else if (pprocess->state() != QProcess::Running) {
-        tc.insertText(tr("GPX finished with code = %1.\n").arg(pprocess->exitCode()));
+        tc.insertText(tr("GPX finished with code = 0x%1.\n").arg(pprocess->exitCode(), 0, 16));
     }
     ui->teLogOutput->setTextCursor(tc);
 }

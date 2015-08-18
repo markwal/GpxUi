@@ -34,6 +34,8 @@ private slots:
 
     void on_btnSave_clicked();
 
+    void on_action_Updates_triggered();
+
 private:
     Ui::MainWindow *ui;
     int heightCollapsed;

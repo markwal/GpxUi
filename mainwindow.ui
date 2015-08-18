@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
+    <width>462</width>
     <height>581</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>GPX - Gcode to X3g Converter</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="gpxui.qrc">
+   <iconset>
     <normaloff>:/icons/gpx.ico</normaloff>:/icons/gpx.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -564,7 +564,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>448</width>
+     <width>462</width>
      <height>21</height>
     </rect>
    </property>
@@ -580,6 +580,8 @@
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionAbout_Qt"/>
+    <addaction name="separator"/>
+    <addaction name="action_Updates"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
@@ -598,6 +600,11 @@
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About &amp;Qt</string>
+   </property>
+  </action>
+  <action name="action_Updates">
+   <property name="text">
+    <string>&amp;Updates...</string>
    </property>
   </action>
  </widget>
@@ -627,9 +634,7 @@
   <tabstop>sbRightTemp</tabstop>
   <tabstop>sbRightStandby</tabstop>
  </tabstops>
- <resources>
-  <include location="gpxui.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>actionExit</sender>

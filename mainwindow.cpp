@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "rungpx.h"
+#include "updates.h"
 #include "machineeditor.h"
 #include "build/version.h"
 
@@ -26,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), QApplication::instance(), SLOT(aboutQt()));
 
     on_btnReload_clicked();
+
+    Updates::autoUpdate();
 }
 
 MainWindow::~MainWindow()
@@ -298,4 +301,10 @@ void MainWindow::on_about()
 
     "Please see additional license information in the documentation distributed with this program.\n"
     );
+}
+
+void MainWindow::on_action_Updates_triggered()
+{
+    Updates updates(this);
+    updates.exec();
 }

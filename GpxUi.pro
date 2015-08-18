@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     rungpx.cpp \
     inih/ini.c \
     iniedit.cpp \
-    machineeditor.cpp
+    machineeditor.cpp \
+    updates.cpp
 
 HEADERS  += mainwindow.h \
     rungpx.h \
@@ -26,11 +27,13 @@ HEADERS  += mainwindow.h \
     inih/ini.h \
     iniedit.h \
     machineeditor.h \
-    main.h
+    main.h \
+    updates.h
 
 FORMS    += mainwindow.ui \
     rungpx.ui \
-    machineeditor.ui
+    machineeditor.ui \
+    updates.ui
 
 DISTFILES += \
     gpxui.rc
