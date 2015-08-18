@@ -14,7 +14,7 @@
    <string>GPX - Gcode to X3g Converter</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="gpxui.qrc">
     <normaloff>:/icons/gpx.ico</normaloff>:/icons/gpx.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -39,10 +39,17 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="editInput"/>
+        <widget class="QLineEdit" name="editInput">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This box indicates what gcode file you want converted to x3g. That dot, dot, dot (...) button to the right lets you choose the file gui style.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
        </item>
        <item row="0" column="2">
         <widget class="QToolButton" name="tbtnInputGcode">
+         <property name="toolTip">
+          <string>Choose the input file with the file picker.</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
@@ -50,6 +57,9 @@
        </item>
        <item row="1" column="1">
         <widget class="QPushButton" name="btnTranslate">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current settings from this dialog to gpx.ini and fire up gpx.exe to translate the input gcode file to an output x3g.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
           <string>Translate!</string>
          </property>
@@ -115,6 +125,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If your machine isn't in the list, it's probably a Replicator 1 or Replicator 1 Dual clone, even if it looks like a Replicator 2. For GPX, what matters is how many steps per mm along each axis and the cloners for the most part use the Rep1 kinematics even if they copy the Rep2's appearance and/or frame structure.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="currentIndex">
              <number>0</number>
             </property>
@@ -137,6 +150,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QComboBox" name="comboGcodeFlavor">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The gcode flavor depends on your slicer or slicer settings not on what kind of a printer you have. MakerBot Desktop and RepG only produce MakerBot flavor, Cura only produces RepRap flavor and Slic3r can produce either depending on its own flavor setting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <item>
              <property name="text">
               <string>RepRap</string>
@@ -151,6 +167,9 @@
           </item>
           <item row="0" column="2">
            <widget class="QToolButton" name="tbMachineEditor">
+            <property name="toolTip">
+             <string>Open the machine.ini editor to customize steps per mm, etc.</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -168,6 +187,9 @@
        </item>
        <item row="1" column="1">
         <widget class="QPushButton" name="btnReload">
+         <property name="toolTip">
+          <string>Reload the settings from the last time they were saved (ie most recent Translate or Save).</string>
+         </property>
          <property name="text">
           <string>Reload</string>
          </property>
@@ -191,6 +213,9 @@
        </item>
        <item row="1" column="2">
         <widget class="QPushButton" name="btnSave">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The &amp;quot;Translate!&amp;quot; button also saves the current settings to gpx.ini. These will be the settings that gpx.exe uses when run from the command line or from a slicer. If you have more than one copy of gpx.exe, only the one that came with GpxUi will use these settings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
           <string>Save</string>
          </property>
@@ -225,6 +250,9 @@
           </property>
           <item row="0" column="1">
            <widget class="QCheckBox" name="cboxProgress">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;With this set, GPX will compute percent completion by doing two passes over the gcode. First pass to compute total time and the second pass to compute percentage completion. It will insert update progress commands into the x3g so the LCD will update with % complete.  Without this checked, it will just use what the slicer inserted (if any). (Default: on).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Recompute build progress</string>
             </property>
@@ -235,6 +263,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QCheckBox" name="cboxDitto">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;I haven't tried this one since SailFish has ditto printing as a firmware feature, but the idea is that GPX simulates the firmware feature by commanding the other extruder to do the same thing as the primary extruder. (Default: off)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Ditto printing</string>
             </property>
@@ -245,6 +276,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QCheckBox" name="cboxRecalc">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this is checked, gpx will use the slicer vs. actual filament width and packing density to adjust the extrusion values. The idea being slice once and adjust for filament changes using gpx. (Default: off)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>Recalculate extrusion</string>
             </property>
@@ -277,6 +311,9 @@
              </property>
              <item>
               <widget class="QDoubleSpinBox" name="dsbNominal">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using the recalculate extrusion feature, this is the &amp;quot;nominal&amp;quot; filament width the slicer assumed when generating the gcode. It will get adjusted based on actual filament width and packing density if recalculate extrusion is turned on. (Default = 0 means don't adjust the extrusions for filament width)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <property name="decimals">
                 <number>4</number>
                </property>
@@ -325,6 +362,9 @@
              </property>
              <item>
               <widget class="QSpinBox" name="sbHBP">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Override the temperatures in the gcode for the heatbed with this value. (Default: 0 means use the gcode value)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <property name="suffix">
                 <string> °C</string>
                </property>
@@ -385,6 +425,9 @@
              </property>
              <item>
               <widget class="QDoubleSpinBox" name="dsbLeftActual">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When recaculate extrusion is on, gpx uses this value divided by the slicer filament width as an adjustment factor for any extrusions. (Default: 0 means don't do this adjustment)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <property name="decimals">
                 <number>4</number>
                </property>
@@ -420,6 +463,9 @@
              </property>
              <item>
               <widget class="QDoubleSpinBox" name="dsbLeftDensity">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is an adjustment factor that is multiplied by the requested extrusion amount when determining how many steps to move the extruder. (Default: 0 means use the machine default).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <property name="decimals">
                 <number>4</number>
                </property>
@@ -443,6 +489,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QSpinBox" name="sbLeftTemp">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Override the left extruder temperatures given in the gcode with this value. (Default: 0, let the gcode decide.)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="suffix">
              <string> °C</string>
             </property>
@@ -460,6 +509,9 @@
           </item>
           <item row="3" column="1">
            <widget class="QSpinBox" name="sbLeftStandby">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When doing a dual extrusion print, whenever a tool change occurs and the left extruder becomes inactive, set it to this temperature. (Default: 0 means leave the temperature alone on tool change, the gcode could change it explicitly of course.)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="suffix">
              <string> °C</string>
             </property>
@@ -489,6 +541,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="dsbRightActual">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When recaculate extrusion is on, gpx uses this value divided by the slicer filament width as an adjustment factor for any extrusions. (Default: 0 means don't do this adjustment)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="decimals">
              <number>4</number>
             </property>
@@ -506,6 +561,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="dsbRightDensity">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is an adjustment factor that is multiplied by the requested extrusion amount when determining how many steps to move the extruder. (Default: 0 means use the machine default).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="decimals">
              <number>4</number>
             </property>
@@ -526,6 +584,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QSpinBox" name="sbRightTemp">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Override the right extruder temperatures given in the gcode with this value. (Default: 0, let the gcode decide.)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="suffix">
              <string> °C</string>
             </property>
@@ -543,6 +604,9 @@
           </item>
           <item row="3" column="1">
            <widget class="QSpinBox" name="sbRightStandby">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When doing a dual extrusion print, whenever a tool change occurs and the right extruder becomes inactive, set it to this temperature. (Default: 0 means leave the temperature alone on tool change, the gcode could change it explicitly of course.)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="suffix">
              <string> °C</string>
             </property>
@@ -634,7 +698,9 @@
   <tabstop>sbRightTemp</tabstop>
   <tabstop>sbRightStandby</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="gpxui.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionExit</sender>

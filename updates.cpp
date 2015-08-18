@@ -102,11 +102,12 @@ void Updates::autoUpdate()
         return;
     QDateTime dt = settings.value("last_update_check", QDateTime()).toDateTime();
     QDateTime dtNow = QDateTime::currentDateTimeUtc();
-    qint64 cdays = dt.daysTo(dtNow);
-    if (dt.isNull() || cdays > 0) {
+    if (dt.isNull() || dt.daysTo(dtNow) > 0) {
         settings.setValue("last_update_check", dtNow);
-        QProcess process;
-        runUpdateExe(&process, UpdateDetached);
+        if (!dt.isNull()) {
+            QProcess process;
+            runUpdateExe(&process, UpdateDetached);
+        }
     }
 }
 

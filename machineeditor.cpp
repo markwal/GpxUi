@@ -84,6 +84,15 @@ static const Machine machineEmpty = {
     MACHINE_TYPE_NONE
 };
 
+static const QString sNozzleDiameter("nozzle_diameter");
+static const QString sExtruderCount("extruder_count");
+static const QString sTimeout("timeout");
+static const QString sStepsPerMm("steps_per_mm");
+static const QString sMaxFeedrate("max_feedrate");
+static const QString sHomeFeedrate("home_feedrate");
+static const QString sEndstop("endstop");
+static const QString sHasHeatedBuildPlatform("has_heated_build_platform");
+
 void MachineEditor::refreshFromMachineIni()
 {
     const Machine *pmachine = gpx_find_machine(sMachineId.toLatin1().constData());
@@ -91,41 +100,41 @@ void MachineEditor::refreshFromMachineIni()
         pmachine = &machineEmpty;
 
     Section *psect = &ie.section("machine");
-    ui->dsbNozzleDiameter->setValue(psect->value("nozzle_diameter", pmachine->nozzle_diameter));
-    ui->sbExtruderCount->setValue(psect->intValue("extruder_count", pmachine->extruder_count));
-    ui->sbTimeout->setValue(psect->intValue("timeout", pmachine->timeout));
+    ui->dsbNozzleDiameter->setValue(psect->value(sNozzleDiameter, pmachine->nozzle_diameter));
+    ui->sbExtruderCount->setValue(psect->intValue(sExtruderCount, pmachine->extruder_count));
+    ui->sbTimeout->setValue(psect->intValue(sTimeout, pmachine->timeout));
 
     // X axis
     psect = &ie.section("x");
-    ui->dsbXStepsPer->setValue(psect->value("steps_per_mm", pmachine->x.steps_per_mm));
-    ui->dsbXMaxFeedrate->setValue(psect->intValue("max_feedrate", pmachine->x.max_feedrate));
-    ui->dsbXHomeFeedrate->setValue(psect->intValue("home_feedrate", pmachine->x.home_feedrate));
-    ui->cbXHome->setCurrentIndex(psect->intValue("endstop", pmachine->x.endstop));
+    ui->dsbXStepsPer->setValue(psect->value(sStepsPerMm, pmachine->x.steps_per_mm));
+    ui->dsbXMaxFeedrate->setValue(psect->intValue(sMaxFeedrate, pmachine->x.max_feedrate));
+    ui->dsbXHomeFeedrate->setValue(psect->intValue(sHomeFeedrate, pmachine->x.home_feedrate));
+    ui->cbXHome->setCurrentIndex(psect->intValue(sEndstop, pmachine->x.endstop));
 
     // Y axis
     psect = &ie.section("y");
-    ui->dsbYStepsPer->setValue(psect->value("steps_per_mm", pmachine->y.steps_per_mm));
-    ui->dsbYMaxFeedrate->setValue(psect->intValue("max_feedrate", pmachine->y.max_feedrate));
-    ui->dsbYHomeFeedrate->setValue(psect->intValue("home_feedrate", pmachine->y.home_feedrate));
-    ui->cbYHome->setCurrentIndex(psect->intValue("endstop", pmachine->x.endstop));
+    ui->dsbYStepsPer->setValue(psect->value(sStepsPerMm, pmachine->y.steps_per_mm));
+    ui->dsbYMaxFeedrate->setValue(psect->intValue(sMaxFeedrate, pmachine->y.max_feedrate));
+    ui->dsbYHomeFeedrate->setValue(psect->intValue(sHomeFeedrate, pmachine->y.home_feedrate));
+    ui->cbYHome->setCurrentIndex(psect->intValue(sEndstop, pmachine->y.endstop));
 
     // X axis
     psect = &ie.section("z");
-    ui->dsbZStepsPer->setValue(psect->value("steps_per_mm", pmachine->z.steps_per_mm));
-    ui->dsbZMaxFeedrate->setValue(psect->intValue("max_feedrate", pmachine->z.max_feedrate));
-    ui->dsbZHomeFeedrate->setValue(psect->intValue("home_feedrate", pmachine->z.home_feedrate));
-    ui->cbZHome->setCurrentIndex(psect->intValue("endstop", pmachine->x.endstop));
+    ui->dsbZStepsPer->setValue(psect->value(sStepsPerMm, pmachine->z.steps_per_mm));
+    ui->dsbZMaxFeedrate->setValue(psect->intValue(sMaxFeedrate, pmachine->z.max_feedrate));
+    ui->dsbZHomeFeedrate->setValue(psect->intValue(sHomeFeedrate, pmachine->z.home_feedrate));
+    ui->cbZHome->setCurrentIndex(psect->intValue(sEndstop, pmachine->z.endstop));
 
     // A axis
     psect = &ie.section("a");
-    ui->dsbAStepsPer->setValue(psect->value("steps_per_mm", pmachine->a.steps_per_mm));
-    ui->dsbAMaxFeedrate->setValue(psect->intValue("max_feedrate", pmachine->a.max_feedrate));
-    ui->cboxHasHBP->setChecked(psect->intValue("has_heated_build_platform", pmachine->a.has_heated_build_platform));
+    ui->dsbAStepsPer->setValue(psect->value(sStepsPerMm, pmachine->a.steps_per_mm));
+    ui->dsbAMaxFeedrate->setValue(psect->intValue(sMaxFeedrate, pmachine->a.max_feedrate));
+    ui->cboxHasHBP->setChecked(psect->intValue(sHasHeatedBuildPlatform, pmachine->a.has_heated_build_platform));
 
     // B axis
     psect = &ie.section("b");
-    ui->dsbBStepsPer->setValue(psect->value("steps_per_mm", pmachine->b.steps_per_mm));
-    ui->dsbBMaxFeedrate->setValue(psect->intValue("max_feedrate", pmachine->b.max_feedrate));
+    ui->dsbBStepsPer->setValue(psect->value(sStepsPerMm, pmachine->b.steps_per_mm));
+    ui->dsbBMaxFeedrate->setValue(psect->intValue(sMaxFeedrate, pmachine->b.max_feedrate));
 }
 
 void MachineEditor::saveToIni()
@@ -135,41 +144,41 @@ void MachineEditor::saveToIni()
         pmachine = &machineEmpty;
 
     Section *psect = &ie.section("machine");
-    psect->setValue("nozzle_diameter", ui->dsbNozzleDiameter->value(), pmachine->nozzle_diameter);
-    psect->setValue("extruder_count", ui->sbExtruderCount->value(), pmachine->extruder_count);
-    psect->setValue("timeout", ui->sbTimeout->value(), pmachine->timeout);
+    psect->setValue(sNozzleDiameter, ui->dsbNozzleDiameter->value(), pmachine->nozzle_diameter);
+    psect->setValue(sExtruderCount, ui->sbExtruderCount->value(), pmachine->extruder_count);
+    psect->setValue(sTimeout, ui->sbTimeout->value(), pmachine->timeout);
 
     // X axis
     psect = &ie.section("x");
-    psect->setValue("steps_per_mm", ui->dsbXStepsPer->value(), pmachine->x.steps_per_mm, 6);
-    psect->setValue("max_feedrate", ui->dsbXMaxFeedrate->value(), pmachine->x.max_feedrate, 0);
-    psect->setValue("home_feedrate", ui->dsbXHomeFeedrate->value(), pmachine->x.home_feedrate, 0);
-    psect->setValue("endstop", ui->cbXHome->currentIndex(), pmachine->x.endstop);
+    psect->setValue(sStepsPerMm, ui->dsbXStepsPer->value(), pmachine->x.steps_per_mm, 6);
+    psect->setValue(sMaxFeedrate, ui->dsbXMaxFeedrate->value(), pmachine->x.max_feedrate, 0);
+    psect->setValue(sHomeFeedrate, ui->dsbXHomeFeedrate->value(), pmachine->x.home_feedrate, 0);
+    psect->setValue(sEndstop, ui->cbXHome->currentIndex(), pmachine->x.endstop);
 
     // Y axis
     psect = &ie.section("y");
-    psect->setValue("steps_per_mm", ui->dsbYStepsPer->value(), pmachine->y.steps_per_mm, 6);
-    psect->setValue("max_feedrate", ui->dsbYMaxFeedrate->value(), pmachine->y.max_feedrate, 0);
-    psect->setValue("home_feedrate", ui->dsbYHomeFeedrate->value(), pmachine->y.home_feedrate, 0);
-    psect->setValue("endstop", ui->cbYHome->currentIndex(), pmachine->x.endstop);
+    psect->setValue(sStepsPerMm, ui->dsbYStepsPer->value(), pmachine->y.steps_per_mm, 6);
+    psect->setValue(sMaxFeedrate, ui->dsbYMaxFeedrate->value(), pmachine->y.max_feedrate, 0);
+    psect->setValue(sHomeFeedrate, ui->dsbYHomeFeedrate->value(), pmachine->y.home_feedrate, 0);
+    psect->setValue(sEndstop, ui->cbYHome->currentIndex(), pmachine->y.endstop);
 
     // X axis
     psect = &ie.section("z");
-    psect->setValue("steps_per_mm", ui->dsbZStepsPer->value(), pmachine->z.steps_per_mm, 6);
-    psect->setValue("max_feedrate", ui->dsbZMaxFeedrate->value(), pmachine->z.max_feedrate, 0);
-    psect->setValue("home_feedrate", ui->dsbZHomeFeedrate->value(), pmachine->z.home_feedrate, 0);
-    psect->setValue("endstop", ui->cbZHome->currentIndex(), pmachine->x.endstop);
+    psect->setValue(sStepsPerMm, ui->dsbZStepsPer->value(), pmachine->z.steps_per_mm, 6);
+    psect->setValue(sMaxFeedrate, ui->dsbZMaxFeedrate->value(), pmachine->z.max_feedrate, 0);
+    psect->setValue(sHomeFeedrate, ui->dsbZHomeFeedrate->value(), pmachine->z.home_feedrate, 0);
+    psect->setValue(sEndstop, ui->cbZHome->currentIndex(), pmachine->z.endstop);
 
     // A axis
     psect = &ie.section("a");
-    psect->setValue("steps_per_mm", ui->dsbAStepsPer->value(), pmachine->a.steps_per_mm, 31);
-    psect->setValue("max_feedrate", ui->dsbAMaxFeedrate->value(), pmachine->a.max_feedrate, 0);
-    psect->setValue("has_heated_build_platform", ui->cboxHasHBP->isChecked(), pmachine->a.has_heated_build_platform);
+    psect->setValue(sStepsPerMm, ui->dsbAStepsPer->value(), pmachine->a.steps_per_mm, 31);
+    psect->setValue(sMaxFeedrate, ui->dsbAMaxFeedrate->value(), pmachine->a.max_feedrate, 0);
+    psect->setValue(sHasHeatedBuildPlatform, ui->cboxHasHBP->isChecked(), pmachine->a.has_heated_build_platform);
 
     // B axis
     psect = &ie.section("b");
-    psect->setValue("steps_per_mm", ui->dsbBStepsPer->value(), pmachine->b.steps_per_mm, 31);
-    psect->setValue("max_feedrate", ui->dsbBMaxFeedrate->value(), pmachine->b.max_feedrate, 0);
+    psect->setValue(sStepsPerMm, ui->dsbBStepsPer->value(), pmachine->b.steps_per_mm, 31);
+    psect->setValue(sMaxFeedrate, ui->dsbBMaxFeedrate->value(), pmachine->b.max_feedrate, 0);
 
     ie.write();
 }
@@ -194,13 +203,13 @@ void MachineEditor::onRestoreDefaultsClicked()
     ui->dsbYStepsPer->setValue(pmachine->y.steps_per_mm);
     ui->dsbYMaxFeedrate->setValue(pmachine->y.max_feedrate);
     ui->dsbYHomeFeedrate->setValue(pmachine->y.home_feedrate);
-    ui->cbYHome->setCurrentIndex(pmachine->x.endstop);
+    ui->cbYHome->setCurrentIndex(pmachine->y.endstop);
 
     // X axis
     ui->dsbZStepsPer->setValue(pmachine->z.steps_per_mm);
     ui->dsbZMaxFeedrate->setValue(pmachine->z.max_feedrate);
     ui->dsbZHomeFeedrate->setValue(pmachine->z.home_feedrate);
-    ui->cbZHome->setCurrentIndex(pmachine->x.endstop);
+    ui->cbZHome->setCurrentIndex(pmachine->z.endstop);
 
     // A axis
     ui->dsbAStepsPer->setValue(pmachine->a.steps_per_mm);
