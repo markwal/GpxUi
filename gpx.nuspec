@@ -10,6 +10,7 @@
     <iconUrl>https://raw.githubusercontent.com/markwal/GpxUi/master/gpx.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>GPX converts .gcode to .x3g for 3d printing</description>
+    <releaseNotes>See https://github.com/markwal/GpxUi/releases</releaseNotes>
     <copyright>Copyright 2013-2015, portions copyright 2008, all rights reserved</copyright>
     <tags>gcode x3g makerbot</tags>
   </metadata>
