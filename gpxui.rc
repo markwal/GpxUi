@@ -1,20 +1,34 @@
 #include "build/version.h"
+#include <winver.h>
 
-IDI_ICON1 ICON DISCARDABLE "gpx.ico"
+1 ICON DISCARDABLE "gpx.ico"
+
 1 VERSIONINFO
+  FILEVERSION 0,1,3,0
+  PRODUCTVERSION 0,1,3,0
+  FILEFLAGSMASK 0x3fL
+  FILEFLAGS 0x0L
+  FILEOS VOS_NT_WINDOWS32 // 0x40004L  // VOS_NT_WINDOWS32
+  FILETYPE VFT_APP // 0x1L    // VFT_APP
+  FILESUBTYPE 0x0L
 BEGIN
-BLOCK "StringFileInfo"
-BEGIN
-    BLOCK "040904b0"
+    BLOCK "StringFileInfo"
     BEGIN
-        VALUE "FileDescription", "File converter from .gcode to .x3g"
-        VALUE "FileVersion", GPXUI_VERSION
-        VALUE "InternalName", "GpxUi.exe"
-        VALUE "LegalCopyright", "Copyright (c) 2015"
-        VALUE "OriginalFilename", "GpxUi.exe"
-        VALUE "ProductName", "GpxUi"
-        VALUE "ProductVersion", GPXUI_VERSION
-        VALUE "SquirrelAwareVersion", "1"
+        BLOCK "040904b0" // en-us unicode
+        BEGIN
+            VALUE "CompanyName", "MarkWal"
+            VALUE "FileDescription", "File converter from .gcode to .x3g"
+            VALUE "FileVersion", GPXUI_VERSION
+            VALUE "InternalName", "GpxUi.exe"
+            VALUE "LegalCopyright", "Copyright (c) 2015. All rights reserved."
+            VALUE "OriginalFilename", "GpxUi.exe"
+            VALUE "ProductName", "GpxUi"
+            VALUE "ProductVersion", GPXUI_VERSION
+            VALUE "SquirrelAwareVersion", "1"
+        END
     END
-END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200 // en-us unicode
+    END
 END

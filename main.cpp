@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
             return 0;
         }
         else if(clp.isSet(cloUpdated)) {
+            // TODO copy *.ini from the obsolete folder
             addAppDirToPath();
             return 0;
         }

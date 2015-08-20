@@ -8,6 +8,7 @@ QTBIN := $(dir $(abspath $(shell which qmake)))
 # some rigamarole to ensure first character after first dash in version string
 # is alphabetic since nuget chokes on a number
 GPXUI_VERSION := $(shell git describe --tags --dirty | awk -- '{sub(/-/,"-dev-")}; 1')
+GPXUI_RCVERSION := $(shell echo $(GPXUI_VERSION) | awk -- 'BEGIN{FS="[.-]"};{print $$1","$$2","$$3",0"};')
 GPXUI_ORIGIN := $(word 2,$(shell git remote -v))
 
 # Squirrel Variables
@@ -43,6 +44,7 @@ $(QTMAKEFILES): GpxUi.Pro
 build/version.h: .git/HEAD .git/index
 	mkdir -p build
 	@echo "#define GPXUI_VERSION \"$(GPXUI_VERSION)\"" > $@
+	@echo "#define GPXUI_RCVERSION \"$(GPXUI_RCVERSION)\"" >> $@
 	@echo "#define GPXUI_ORIGIN \"$(GPXUI_ORIGIN)\"" >> $@
 
 populatewinbin: release
