@@ -50,7 +50,9 @@ populatewinbin: release
 	cp GPX/src/gpx/win32_obj/gpx.exe $(SQUIRRELWINBIN)
 	cp build/mingw32/release/GpxUi.exe $(SQUIRRELWINBIN)
 	cp README.md $(SQUIRRELWINBIN)
+	cp RELEASE.md $(SQUIRRELWINBIN)
 	cp LICENSE $(SQUIRRELWINBIN)
+	cp Squirrel.COPYING $(SQUIRRELWINBIN)
 
 windeployqt: populatewinbin
 	windeployqt --release-with-debug-info --no-plugins --no-translations $(SQUIRRELWINBIN)GpxUi.exe
