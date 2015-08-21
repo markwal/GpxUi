@@ -1,4 +1,4 @@
-# GpxUi 0.1.3
+# GpxUi 0.1.5
 
 ## Improvements
 
@@ -12,3 +12,7 @@
     the x endstop)
   * Releases now include release notes built into the nupkg which prevents
     squirrel from barfing in the log
+  * Notify the shell that we've changed the path (hopefully, workaround is to
+    logout and log back in)
+
+([Commits](https://github.com/markwal/GpxUi/compare/0.1.2...0.1.5))
