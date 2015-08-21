@@ -9,6 +9,7 @@ extern "C" {
 }
 
 #include <QString>
+#include <QDir>
 #include <QTextStream>
 QTextStream &qStdout();
 
@@ -104,19 +105,27 @@ bool IniEditor::read(ParserCallback pc = NULL, void *user = NULL)
     return true;
 }
 
-bool IniEditor::write()
+bool IniEditor::write(bool fCopyToParent)
 {
-   if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-       return false;
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        return false;
 
-   QTextStream ts(&file);
-   for (ConstLineIterator iline = ll.constBegin(); iline != ll.constEnd(); iline++) {
-       if (!iline->fDeleted)
-           ts << iline->sLine << "\n";
-   }
+    QTextStream ts(&file);
+    for (ConstLineIterator iline = ll.constBegin(); iline != ll.constEnd(); iline++) {
+        if (!iline->fDeleted)
+            ts << iline->sLine << "\n";
+    }
 
-   file.close();
-   return true;
+    file.close();
+
+    if (fCopyToParent) {
+        QFileInfo fi(file.fileName());
+        QDir dir(fi.absoluteDir());
+        dir.cdUp();
+        file.copy(dir.absoluteFilePath(fi.fileName()));
+    }
+
+    return true;
 }
 
 void Section::dump() const

@@ -86,7 +86,7 @@ static void setPathForAppDir(bool fRemove)
         if (sPath.isEmpty())
             settings.setValue("PATH", a.applicationDirPath());
         else if (!sPath.contains(a.applicationDirPath()))
-            settings.setValue("PATH", sPath + ";" + a.applicationDirPath());
+            settings.setValue("PATH", a.applicationDirPath() + ";" + sPath);
         else
             return;
     }
@@ -124,39 +124,36 @@ int main(int argc, char *argv[])
 
         if (clp.isSet(cloInstall)) {
             setPathForAppDir(false);
-            QMessageBox mbox;
-            mbox.setText(QString("--squirrel-install %1").arg(clp.value(cloInstall)));
-            mbox.exec();
             runUpdate("--createShortcut=GpxUi.exe", false);
             return 0;
         }
         else if(clp.isSet(cloUpdated)) {
-            // TODO copy *.ini from the obsolete folder
+            QDir dirSrc = GpxUiInfo::iniLocation();
+            QDir dirDest = dirSrc;
+            dirSrc.cdUp();
+
+            QStringList slFilters;
+            slFilters << "*.ini";
+
+            QStringList sl = dirSrc.entryList(slFilters);
+            int is = sl.size();
+            while (is--) {
+                QFile::copy(dirSrc.absoluteFilePath(sl[is]), dirDest.absoluteFilePath(sl[is]));
+            }
+
             setPathForAppDir(false);
-            QMessageBox mbox;
-            mbox.setText(QString("--squirrel-updated %1").arg(clp.value(cloUpdated)));
-            mbox.exec();
             return 0;
         }
         else if (clp.isSet(cloObsolete)) {
             setPathForAppDir(true);
-            QMessageBox mbox;
-            mbox.setText(QString("--squirrel-obsolete %1").arg(clp.value(cloObsolete)));
-            mbox.exec();
             return 0;
         }
         else if (clp.isSet(cloUninstall)) {
             runUpdate("--removeShortcut=GpxUi.exe", true);
             setPathForAppDir(true);
-            QMessageBox mbox;
-            mbox.setText(QString("--squirrel-uninstall %1").arg(clp.value(cloUninstall)));
-            mbox.exec();
             return 0;
         }
         else if (clp.isSet(cloFirstRun)) {
-            QMessageBox mbox;
-            mbox.setText(QString("--squirrel-firstrun %1").arg(clp.value(cloFirstRun)));
-            mbox.exec();
         }
         else {
             clp.showHelp();

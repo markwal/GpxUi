@@ -86,7 +86,7 @@ public:
     void clear();
     void setFilename(const QString &sPathName);
     bool read(ParserCallback pc, void *user);
-    bool write();
+    bool write(bool fCopyToParent = false);
     QFileDevice::FileError error() {return fe;}
 
     Section &section(QString s);
