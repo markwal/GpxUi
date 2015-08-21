@@ -91,8 +91,8 @@ static void setPathForAppDir(bool fRemove)
             return;
     }
 
-    PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)L"Environment");
-    PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)"Environment");
+    SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)L"Environment", SMTO_ABORTIFHUNG, 500, NULL);
+    SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)"Environment", SMTO_ABORTIFHUNG, 500, NULL);
 }
 
 int main(int argc, char *argv[])
