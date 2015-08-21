@@ -1,24 +1,39 @@
 # OS Specifics
 ifeq ($(OS),Windows_NT)
     # Windows
-    QTSUBDIRS = build/mingw32
-    QMAKEFLAGS = -r -spec win32-g++ "CONFIG+=debug"
+    QTDEBUGDIR :=
+    QTRELEASEDIR :=
+    DEBUGTARGET := first
+    RELEASETARGET := release
+    QTSUBDIRS := build/mingw32
+    QMAKEDEBUGFLAGS := -r -spec win32-g++ "CONFIG+=debug"
+    QTMAKEFILES := $(addsuffix /Makefile,$(QTSUBDIRS))
+    QTDEBUGMAKEFILE := $(QTMAKEFILES)
 else
     UNAMESYS := $(shell uname -s)
     ifeq ($(UNAMESYS),Darwin)
-	# Mac
-	QTSUBDIRS = build/darwin
-	# what QMAKEFLAGS?
+
+    # Mac
+    QTSUBDIRS := build/darwin
+    # what QMAKEFLAGS?
     else
-	# Linux
-	QTSUBDIRS = build/linux
-	QMAKEFLAGS = -r -spec linux-g++-64
+
+    # Linux
+    QTDEBUGDIR := build/linux/debug
+    QTRELEASEDIR := build/linux/release
+    DEBUGTARGET := all
+    RELEASETARGET := all
+    QTSUBDIRS :=
+    QMAKEDEBUGFLAGS := -r -spec linux-g++-64 "CONFIG+=debug" "CONFIG+=declarative_debug" "CONFIG+=qml_debug"
+    QMAKERELEASEFLAGS := -r -spec linux-g++-64
+    QTDEBUGMAKEFILE := $(QTDEBUGDIR)/Makefile
+    QTRELEASEMAKEFILE := $(QTRELEASEDIR)/Makefile
+    QTMAKEFILES := $(QTDEBUGMAKEFILE) $(QTRELEASEMAKEFILE)
     endif
 endif
 
 # Variables
 SUBDIRS = $(QTSUBDIRS) GPX
-QTMAKEFILES := $(addsuffix /Makefile,$(QTSUBDIRS))
 QTBIN := $(dir $(abspath $(shell which qmake)))
 
 # Version Variables
@@ -45,18 +60,36 @@ endif
 
 # Rules
 
-.PHONY: first all clean test debug release populatewinbin windeployqt squirrel.windows
+.PHONY: first all clean test debug release loopdirs populatewinbin windeployqt squirrel.windows
 
-first all clean test debug release: build/version.h $(QTMAKEFILES)
+first debug: $(QTDEBUGMAKEFILE)
+	for dir in $(QTDEBUGDIR) $(SUBDIRS); do \
+		echo "Entering $$dir"; \
+		make -C $$dir $(DEBUGTARGET); \
+		echo "Exiting $$dir"; \
+	done
+
+release: $(QTRELEASEMAKEFILE)
+	for dir in $(QTRELEASEDIR) $(SUBDIRS); do \
+		echo "Entering $$dir"; \
+		make -C $$dir $(RELEASETARGET); \
+		echo "Exiting $$dir"; \
+	done
+
+all clean test: build/version.h $(QTMAKEFILES)
 	for dir in $(SUBDIRS); do \
 		echo "Entering $$dir"; \
 		make -C $$dir $@; \
 		echo "Exiting $$dir"; \
 	done
 
-$(QTMAKEFILES): GpxUi.pro
+$(QTDEBUGMAKEFILE): GpxUi.pro
 	mkdir -p $(dir $@)
-	cd $(dir $@); qmake ../../$< $(QMAKEFLAGS)
+	cd $(dir $@); qmake ../../../$< $(QMAKEDEBUGFLAGS)
+
+$(QTRELEASEMAKEFILE): GpxUi.pro
+	mkdir -p $(dir $@)
+	cd $(dir $@); qmake ../../../$< $(QMAKERELEASEFLAGS)
 
 build/version.h: .git/HEAD .git/index
 	mkdir -p build
