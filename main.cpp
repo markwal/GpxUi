@@ -7,6 +7,7 @@
 #include <QtGui>
 #include <QTextStream>
 #include <QStandardPaths>
+#include <QMessageBox>
 
 QTextStream &qStdout()
 {
@@ -46,16 +47,25 @@ namespace GpxUiInfo
     }
 }
 
-static void runUpdate(const QString sParam)
+static void runUpdate(const QString sParam, bool fWait)
 {
     QDir dir(QApplication::instance()->applicationDirPath());
     dir.cdUp();
+    QString sApp = dir.filePath("Update.exe");
     QStringList sArgs;
     sArgs << sParam;
-    QProcess::startDetached(dir.filePath("Update.exe"), sArgs);
+
+    if (fWait) {
+        QProcess process;
+        process.start(sApp, sArgs);
+        process.waitForFinished(5000);
+    }
+    else {
+        QProcess::startDetached(dir.filePath("Update.exe"), sArgs);
+    }
 }
 
-static void addAppDirToPath()
+static void setPathForAppDir(bool fRemove)
 {
     QCoreApplication &a = *QApplication::instance();
     QDir dir(a.applicationDirPath());
@@ -63,28 +73,24 @@ static void addAppDirToPath()
 
     QSettings settings("HKEY_CURRENT_USER\\Environment", QSettings::NativeFormat);
     QString sPath = settings.value("PATH", QString()).toString();
-    if (sPath.isEmpty())
-        settings.setValue("PATH", a.applicationDirPath());
-    else if (!sPath.contains(a.applicationDirPath()))
-        settings.setValue("PATH", sPath + ";" + a.applicationDirPath());
-    PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)L"Environment");
-    PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)"Environment");
-}
 
-static void removeAppDirFromPath()
-{
-    QCoreApplication &a = *QApplication::instance();
-    QDir dir(a.applicationDirPath());
-    dir.cdUp();
+    if (fRemove) {
+        sPath = sPath.remove(QString(";") + a.applicationDirPath());
+        sPath = sPath.remove(a.applicationDirPath());
+        if (sPath.isEmpty())
+            settings.remove("PATH");
+        else
+            settings.setValue("PATH", sPath);
+    }
+    else {
+        if (sPath.isEmpty())
+            settings.setValue("PATH", a.applicationDirPath());
+        else if (!sPath.contains(a.applicationDirPath()))
+            settings.setValue("PATH", sPath + ";" + a.applicationDirPath());
+        else
+            return;
+    }
 
-    QSettings settings("HKEY_CURRENT_USER\\Environment", QSettings::NativeFormat);
-    QString sPath = settings.value("PATH", QString()).toString();
-    sPath = sPath.remove(QString(";") + a.applicationDirPath());
-    sPath = sPath.remove(a.applicationDirPath());
-    if (sPath.isEmpty())
-        settings.remove("PATH");
-    else
-        settings.setValue("PATH", sPath);
     PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)L"Environment");
     PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)"Environment");
 }
@@ -117,25 +123,40 @@ int main(int argc, char *argv[])
         clp.process(a);
 
         if (clp.isSet(cloInstall)) {
-            addAppDirToPath();
-            runUpdate("--createShortcut=GpxUi.exe");
+            setPathForAppDir(false);
+            QMessageBox mbox;
+            mbox.setText(QString("--squirrel-install %1").arg(clp.value(cloInstall)));
+            mbox.exec();
+            runUpdate("--createShortcut=GpxUi.exe", false);
             return 0;
         }
         else if(clp.isSet(cloUpdated)) {
             // TODO copy *.ini from the obsolete folder
-            addAppDirToPath();
+            setPathForAppDir(false);
+            QMessageBox mbox;
+            mbox.setText(QString("--squirrel-updated %1").arg(clp.value(cloUpdated)));
+            mbox.exec();
             return 0;
         }
         else if (clp.isSet(cloObsolete)) {
-            removeAppDirFromPath();
+            setPathForAppDir(true);
+            QMessageBox mbox;
+            mbox.setText(QString("--squirrel-obsolete %1").arg(clp.value(cloObsolete)));
+            mbox.exec();
             return 0;
         }
         else if (clp.isSet(cloUninstall)) {
-            removeAppDirFromPath();
-            runUpdate("--removeShortcut=GpxUi.exe");
+            runUpdate("--removeShortcut=GpxUi.exe", true);
+            setPathForAppDir(true);
+            QMessageBox mbox;
+            mbox.setText(QString("--squirrel-uninstall %1").arg(clp.value(cloUninstall)));
+            mbox.exec();
             return 0;
         }
         else if (clp.isSet(cloFirstRun)) {
+            QMessageBox mbox;
+            mbox.setText(QString("--squirrel-firstrun %1").arg(clp.value(cloFirstRun)));
+            mbox.exec();
         }
         else {
             clp.showHelp();

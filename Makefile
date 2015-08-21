@@ -44,7 +44,7 @@ $(QTMAKEFILES): GpxUi.Pro
 build/version.h: .git/HEAD .git/index
 	mkdir -p build
 	@echo "#define GPXUI_VERSION \"$(GPXUI_VERSION)\"" > $@
-	@echo "#define GPXUI_RCVERSION \"$(GPXUI_RCVERSION)\"" >> $@
+	@echo "#define GPXUI_RCVERSION $(GPXUI_RCVERSION)" >> $@
 	@echo "#define GPXUI_ORIGIN \"$(GPXUI_ORIGIN)\"" >> $@
 
 populatewinbin: release
