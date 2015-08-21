@@ -5,6 +5,8 @@ permalink: /index.html
 ---
 GpxUi is a graphical user interface wrapped around GPX, a command line utility.
 
+![Screenshot](gpxui.png)
+
 It is Window only at the moment, but I made it with Qt with the intention of building
 it for other platforms. I don't have a Mac, but I've got Linux, so if there is interest
 I'll make a linux version.
