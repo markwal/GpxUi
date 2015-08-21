@@ -26,12 +26,12 @@ namespace GpxUiInfo
         dirIni.setPath(QApplication::instance()->applicationDirPath());
         dirMachineIni = dirIni;
 #else
-        dirIniLocation.setPath(QStandardPaths::HomeLocation());
-        dirMachineIniLocation = dirIniLocation;
+        dirIni.setPath(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+        dirMachineIni = dirIni;
         const char *sz = ".gpx";
-        if (!dirMachineIniLocation.cd(sz)) {
-            dirMachineIniLocation.mkdir(sz);
-            dirMachineIniLocation.cd(sz);
+        if (!dirMachineIni.cd(sz)) {
+            dirMachineIni.mkdir(sz);
+            dirMachineIni.cd(sz);
         }
 #endif
     }
@@ -47,6 +47,7 @@ namespace GpxUiInfo
     }
 }
 
+#ifdef Q_OS_WIN
 static void runUpdate(const QString sParam, bool fWait)
 {
     QDir dir(QApplication::instance()->applicationDirPath());
@@ -94,6 +95,7 @@ static void setPathForAppDir(bool fRemove)
     SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)L"Environment", SMTO_ABORTIFHUNG, 500, NULL);
     SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)"Environment", SMTO_ABORTIFHUNG, 500, NULL);
 }
+#endif // Q_OS_WIN
 
 int main(int argc, char *argv[])
 {
@@ -105,6 +107,8 @@ int main(int argc, char *argv[])
     a.setApplicationName("GpxUi");
     GpxUiInfo::init();
 
+#ifdef Q_OS_WIN
+    // Squirrel for Windows event handlers
     if (argc > 1) {
         QCommandLineParser clp;
         clp.setApplicationDescription("GpxUi is a graphical user interface for running GPX, a command line utility that converts .gcode to .x3g");
@@ -161,6 +165,7 @@ int main(int argc, char *argv[])
             return 0;
         }
     }
+#endif // Q_OS_WIN
 
 /*
     QString szPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);

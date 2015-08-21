@@ -1,6 +1,23 @@
+# OS Specifics
+ifeq ($(OS),Windows_NT)
+    # Windows
+    QTSUBDIRS = build/mingw32
+    QMAKEFLAGS = -r -spec win32-g++ "CONFIG+=debug"
+else
+    UNAMESYS := $(shell uname -s)
+    ifeq ($(UNAMESYS),Darwin)
+	# Mac
+	QTSUBDIRS = build/darwin
+	# what QMAKEFLAGS?
+    else
+	# Linux
+	QTSUBDIRS = build/linux
+	QMAKEFLAGS = -r -spec linux-g++-64
+    endif
+endif
+
 # Variables
-QTSUBDIRS = build/mingw32
-SUBDIRS = $(QTSUBDIRS) gpx
+SUBDIRS = $(QTSUBDIRS) GPX
 QTMAKEFILES := $(addsuffix /Makefile,$(QTSUBDIRS))
 QTBIN := $(dir $(abspath $(shell which qmake)))
 
@@ -37,9 +54,9 @@ first all clean test debug release: build/version.h $(QTMAKEFILES)
 		echo "Exiting $$dir"; \
 	done
 
-$(QTMAKEFILES): GpxUi.Pro
+$(QTMAKEFILES): GpxUi.pro
 	mkdir -p $(dir $@)
-	cd $(dir $@); qmake ../../$< -r -spec win32-g++ "CONFIG+=debug"
+	cd $(dir $@); qmake ../../$< $(QMAKEFLAGS)
 
 build/version.h: .git/HEAD .git/index
 	mkdir -p build
