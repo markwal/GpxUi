@@ -1,0 +1,12 @@
+# Site settings
+title: GpxUi
+description: > # this means to ignore newlines until "baseurl:"
+    GPX in a GUI wrapper that will probably stick to your fingers
+baseurl: "/GpxUi" # the subpath of your site, e.g. /blog/
+url: "http://markwal.github.io" # the base hostname & protocol for your site
+twitter_username: walkmarker
+github_username:  markwal
+
+# Build settings
+markdown: kramdown
+highlighter: pygments
