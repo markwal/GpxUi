@@ -105,7 +105,7 @@ bool IniEditor::read(ParserCallback pc = NULL, void *user = NULL)
     return true;
 }
 
-bool IniEditor::write(bool fCopyToParent)
+bool IniEditor::write()
 {
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         return false;
@@ -117,15 +117,13 @@ bool IniEditor::write(bool fCopyToParent)
     }
 
     file.close();
-
-    if (fCopyToParent) {
-        QFileInfo fi(file.fileName());
-        QDir dir(fi.absoluteDir());
-        dir.cdUp();
-        file.copy(dir.absoluteFilePath(fi.fileName()));
-    }
-
     return true;
+}
+
+bool IniEditor::copyTo(QDir dir)
+{
+    QFileInfo fi(file.fileName());
+    return file.copy(dir.absoluteFilePath(fi.fileName()));
 }
 
 void Section::dump() const

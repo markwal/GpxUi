@@ -180,7 +180,8 @@ void MachineEditor::saveToIni()
     psect->setValue(sStepsPerMm, ui->dsbBStepsPer->value(), pmachine->b.steps_per_mm, 31);
     psect->setValue(sMaxFeedrate, ui->dsbBMaxFeedrate->value(), pmachine->b.max_feedrate, 0);
 
-    ie.write(true);
+    ie.write();
+    GpxUiInfo::copyToVersionIndependentLocation(ie);
 }
 
 void MachineEditor::onRestoreDefaultsClicked()

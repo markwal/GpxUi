@@ -14,12 +14,14 @@ QTextStream &qStdout();
 #endif
 
 class QDir;
+class IniEditor;
 
 namespace GpxUiInfo
 {
 void init();
 const QDir &iniLocation();
 const QDir &machineIniLocation();
+bool CopyToVersionIndependentLocation(IniEditor &ie);
 };
 
 

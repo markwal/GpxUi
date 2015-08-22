@@ -241,7 +241,8 @@ void MainWindow::saveToIni()
     psect->setValue("active_temperature", ui->sbRightTemp->value(), 0);
     psect->setValue("standby_temperature", ui->sbRightStandby->value(), 0);
 
-    ie.write(true);
+    ie.write();
+    GpxUiInfo::copyToVersionIndependentLocation(ie);
 }
 
 void MainWindow::on_btnDefaults_clicked()

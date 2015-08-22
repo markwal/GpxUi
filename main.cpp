@@ -45,6 +45,26 @@ namespace GpxUiInfo
     {
         return dirMachineIni;
     }
+
+#ifdef Q_OS_WIN
+    bool CopyToVersionIndependentLocation(IniEditor &ie)
+    {
+        // Windows gpx.exe assumes gpx.ini goes in the .exe folder, we put the
+        // .exe in a folder for its version so we can upgrade while it's running
+        // So here, we copy it up a folder so upgrade can get it, but only if
+        // we appear to be in the squirrel folder (../Update.exe exists).
+        QDir dir(ie.fileName());
+        dir.cdUp();
+        FileInfo fi(dir.absoluteFileName("Update.exe"));
+        return fi.exists() ? ie.copyTo(dir) : true;
+    }
+#else
+    bool CopyToVersionIndependentLocation(IniEditor &ie)
+    {
+        // already there
+        return true;
+    }
+#endif
 }
 
 static void runUpdate(const QString sParam, bool fWait)
