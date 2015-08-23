@@ -78,8 +78,10 @@ release: build/version.h $(QTRELEASEMAKEFILE)
 		echo "Exiting $$dir"; \
 	done
 
-all clean test: build/version.h $(QTMAKEFILES)
-	for dir in $(SUBDIRS); do \
+all: first release
+
+clean test: build/version.h $(QTMAKEFILES)
+	for dir in $(SUBDIRS) $(QTDEBUGDIR) $(QTRELEASEDIR); do \
 		echo "Entering $$dir"; \
 		make -C $$dir $@; \
 		echo "Exiting $$dir"; \
