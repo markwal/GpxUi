@@ -6,6 +6,7 @@ ifeq ($(OS),Windows_NT)
     DEBUGTARGET := first
     RELEASETARGET := release
     QTSUBDIRS := build/mingw32
+    QTFROMBUILDTOROOT := ../../
     QMAKEDEBUGFLAGS := -r -spec win32-g++ "CONFIG+=debug"
     QTMAKEFILES := $(addsuffix /Makefile,$(QTSUBDIRS))
     QTDEBUGMAKEFILE := $(QTMAKEFILES)
@@ -24,6 +25,7 @@ else
     DEBUGTARGET := all
     RELEASETARGET := all
     QTSUBDIRS :=
+    QTFROMBUILDTOROOT := ../../../
     QMAKEDEBUGFLAGS := -r -spec linux-g++-64 "CONFIG+=debug" "CONFIG+=declarative_debug" "CONFIG+=qml_debug"
     QMAKERELEASEFLAGS := -r -spec linux-g++-64
     QTDEBUGMAKEFILE := $(QTDEBUGDIR)/Makefile
@@ -62,14 +64,14 @@ endif
 
 .PHONY: first all clean test debug release loopdirs populatewinbin windeployqt squirrel.windows
 
-first debug: $(QTDEBUGMAKEFILE)
+first debug: build/version.h $(QTDEBUGMAKEFILE)
 	for dir in $(QTDEBUGDIR) $(SUBDIRS); do \
 		echo "Entering $$dir"; \
 		make -C $$dir $(DEBUGTARGET); \
 		echo "Exiting $$dir"; \
 	done
 
-release: $(QTRELEASEMAKEFILE)
+release: build/version.h $(QTRELEASEMAKEFILE)
 	for dir in $(QTRELEASEDIR) $(SUBDIRS); do \
 		echo "Entering $$dir"; \
 		make -C $$dir $(RELEASETARGET); \
@@ -85,11 +87,11 @@ all clean test: build/version.h $(QTMAKEFILES)
 
 $(QTDEBUGMAKEFILE): GpxUi.pro
 	mkdir -p $(dir $@)
-	cd $(dir $@); qmake ../../../$< $(QMAKEDEBUGFLAGS)
+	cd $(dir $@); qmake $(QTFROMBUILDTOROOT)$< $(QMAKEDEBUGFLAGS)
 
 $(QTRELEASEMAKEFILE): GpxUi.pro
 	mkdir -p $(dir $@)
-	cd $(dir $@); qmake ../../../$< $(QMAKERELEASEFLAGS)
+	cd $(dir $@); qmake $(QTFROMBUILDTOROOT)$< $(QMAKERELEASEFLAGS)
 
 build/version.h: .git/HEAD .git/index
 	mkdir -p build

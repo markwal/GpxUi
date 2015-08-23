@@ -9,7 +9,7 @@
 #include <QTimer>
 
 #ifdef Q_OS_WIN
-static const QLatin1String sGpxExe = "gpx.exe";
+static const QLatin1String sGpxExe("gpx.exe");
 #else
 static const QLatin1String sGpxExe("gpx");
 #endif
