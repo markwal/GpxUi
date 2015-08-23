@@ -21,7 +21,7 @@ namespace GpxUiInfo
 void init();
 const QDir &iniLocation();
 const QDir &machineIniLocation();
-bool CopyToVersionIndependentLocation(IniEditor &ie);
+bool copyToVersionIndependentLocation(IniEditor &ie);
 };
 
 

@@ -85,6 +85,7 @@ public:
 
     void clear();
     void setFilename(const QString &sPathName);
+    bool copyTo(QDir dir);
     inline QString fileName() { return file.fileName(); }
 
     bool read(ParserCallback pc, void *user);
