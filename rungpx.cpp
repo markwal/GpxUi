@@ -8,6 +8,12 @@
 #include <QTextCursor>
 #include <QTimer>
 
+#ifdef Q_OS_WIN
+static const QLatin1String sGpxExe("gpx.exe");
+#else
+static const QLatin1String sGpxExe("gpx");
+#endif
+
 RunGpx::RunGpx(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RunGpx)
@@ -61,7 +67,7 @@ void RunGpx::ReadStdOut()
 void RunGpx::Translate(const QString& sInputName, const QString& sOutputName)
 {
     QDir dir(QApplication::instance()->applicationDirPath());
-    QString sApp = dir.absoluteFilePath(QLatin1String("gpx.exe"));
+    QString sApp = dir.absoluteFilePath(sGpxExe);
     QStringList slArgs;
     slArgs << QLatin1String("-v") << sInputName << sOutputName;
 
