@@ -66,6 +66,11 @@ void MainWindow::setAdvanced(bool isAdvanced)
         setFixedHeight(isAdvanced ? sizeHint().height() : heightCollapsed);
 }
 
+void MainWindow::setInputName(QString s)
+{
+    ui->editInput->setText(s);
+}
+
 void MainWindow::on_btnAdvancedToggle_clicked()
 {
     setAdvanced(ui->widgetAdvanced->isHidden());
