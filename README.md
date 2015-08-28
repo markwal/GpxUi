@@ -78,6 +78,14 @@ Help.Updates... menu.
 3. Install QT and make sure it and the mingw32 it includes is on your path, I
    run gnu make under bash so I may have introduced a build-time dependency on
    bash
-4. `make`
+4. `make` for the debug build or `make release` for the optimized build
 
 For Windows setup.exe: `make squirrel.windows`
+
+## Ubuntu build instructions
+
+1. Clone the repository `git clone https://github.com/markwal/GpxUi`
+2. Get the submodules `git submodule update --init`
+3. Install qt5 tools and libraries `sudo apt-get install qttools5-dev-tools
+   qtbase5-dev`
+4. `make` for the debug build or `make release` for the optimized build
