@@ -2,6 +2,7 @@
 #include "main.h"
 #include "mainwindow.h"
 #include "iniedit.h"
+#include "build/version.h"
 
 #include <QApplication>
 #include <QtGui>
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 
     a.setOrganizationName("MarkWal");
     a.setOrganizationDomain("markwal.github.io");
-    a.setApplicationName("GpxUi");
+    a.setApplicationName("GpxUi " GPXUI_VERSION);
     GpxUiInfo::init();
 
     QCommandLineParser clp;
