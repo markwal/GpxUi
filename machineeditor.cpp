@@ -181,7 +181,7 @@ void MachineEditor::saveToIni()
     psect->setValue(sMaxFeedrate, ui->dsbBMaxFeedrate->value(), pmachine->b.max_feedrate, 0);
 
     ie.write();
-    GpxUiInfo::copyToVersionIndependentLocation(ie);
+    CopyToVersionIndependentLocation(ie);
 }
 
 void MachineEditor::onRestoreDefaultsClicked()
