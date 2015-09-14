@@ -31,6 +31,26 @@ bool IsUserAdmin(void)
     return f;
 }
 
+// Create a shortcut in the squirrel applicaiton folder (each gpx.exe and
+// gpxui.exe version is in a versioned subfolder off of this) to the current
+// version gpx.exe
+bool createGpxExeLink()
+{
+    QCoreApplication &a = *QApplication::instance();
+    QDir dir(a.applicationDirPath());
+    QFile f(dir.filePath("gpx.exe"));
+    dir.cdUp();
+
+    // update.exe is our indicator that we're in the squirrel subfolder
+    QFileInfo fi(dir.absoluteFilePath("Update.exe"));
+    if (!fi.exists())
+        return true;
+
+    const QString &s = dir.filePath("gpx.exe.lnk");
+    f.remove(s);
+    return f.link(s);
+}
+
 bool CopyToVersionIndependentLocation(IniEditor &ie)
 {
     // Windows gpx.exe assumes gpx.ini goes in the .exe folder, we put the
@@ -64,8 +84,6 @@ static void runUpdate(const QString sParam, bool fWait)
 static void setPathForAppDir(bool fRemove)
 {
     QCoreApplication &a = *QApplication::instance();
-    QDir dir(a.applicationDirPath());
-    dir.cdUp();
 
     QSettings settings("HKEY_CURRENT_USER\\Environment", QSettings::NativeFormat);
     QString sPath = settings.value("PATH", QString()).toString();
@@ -127,6 +145,7 @@ bool SetupEvents::handleOptions(QCommandLineParser &clp)
         setPathForAppDir(false);
         runUpdate("--createShortcut=GpxUi.exe", false);
         registerGcodeExtension();
+        createGpxExeLink();
         return true;
     }
     else if(clp.isSet(cloUpdated)) {
@@ -145,6 +164,7 @@ bool SetupEvents::handleOptions(QCommandLineParser &clp)
 
         setPathForAppDir(false);
         registerGcodeExtension();
+        createGpxExeLink();
         return true;
     }
     else if (clp.isSet(cloObsolete)) {
