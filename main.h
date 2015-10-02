@@ -45,7 +45,7 @@ public:
     QCommandLineOption cloObsolete;
     QCommandLineOption cloUninstall;
 #else
-    void AddOptions(QCommandLineParser &clp) {}
+    void addOptions(QCommandLineParser &clp) {}
     bool handleOptions(QCommandLineParser &clp) {return true;}
 #endif // Q_OS_WIN
 };
