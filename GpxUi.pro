@@ -21,6 +21,8 @@ SOURCES += main.cpp\
     machineeditor.cpp \
     updates.cpp
 
+win32:SOURCES += win/win.cpp
+
 HEADERS  += mainwindow.h \
     rungpx.h \
     build/version.h \

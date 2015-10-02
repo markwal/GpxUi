@@ -20,6 +20,7 @@ public:
     ~MainWindow();
 
     void setAdvanced(bool isAdvanced);
+    void setInputName(QString s);
 
 private slots:
     void on_btnAdvancedToggle_clicked();
@@ -27,13 +28,9 @@ private slots:
     void on_tbMachineEditor_clicked();
     void on_btnTranslate_clicked();
     void on_about();
-
     void on_btnDefaults_clicked();
-
     void on_btnReload_clicked();
-
     void on_btnSave_clicked();
-
     void on_action_Updates_triggered();
 
 private:

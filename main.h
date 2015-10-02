@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include <QtGlobal>
+#include <QCommandLineOption>
 
 class QTextStream;
 QTextStream &qStdout();
@@ -14,6 +15,7 @@ QTextStream &qStdout();
 #endif
 
 class QDir;
+class QCommandLineParser;
 class IniEditor;
 
 namespace GpxUiInfo
@@ -21,9 +23,38 @@ namespace GpxUiInfo
 void init();
 const QDir &iniLocation();
 const QDir &machineIniLocation();
-bool copyToVersionIndependentLocation(IniEditor &ie);
 };
 
+class SetupEvents
+{
+public:
+#ifdef Q_OS_WIN
+    void addOptions(QCommandLineParser &);
+    bool handleOptions(QCommandLineParser &);
+
+    SetupEvents() :
+        cloInstall("squirrel-install", "Perform squirrel post install action", "version"),
+        cloFirstRun("squirrel-firstrun", "First run after squirrel install"),
+        cloUpdated("squirrel-updated", "Perform squirrel post update action", "version"),
+        cloObsolete("squirrel-obsolete", "Perform squirrel post update cleanup action", "version"),
+        cloUninstall("squirrel-uninstall", "Perform squirrel pre uninstall action", "version") {}
+
+    QCommandLineOption cloInstall;
+    QCommandLineOption cloFirstRun;
+    QCommandLineOption cloUpdated;
+    QCommandLineOption cloObsolete;
+    QCommandLineOption cloUninstall;
+#else
+    void AddOptions(QCommandLineParser &clp) {}
+    bool handleOptions(QCommandLineParser &clp) {return true;}
+#endif // Q_OS_WIN
+};
+
+#ifdef Q_OS_WIN
+bool CopyToVersionIndependentLocation(IniEditor &);
+#else
+#define CopyToVersionIndependentLocation(ie) (true)
+#endif // !Q_OS_WIN
 
 #endif // MAIN_H
 

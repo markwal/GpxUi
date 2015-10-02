@@ -17,7 +17,7 @@ BEGIN
         BLOCK "040904b0" // en-us unicode
         BEGIN
             VALUE "CompanyName", "MarkWal"
-            VALUE "FileDescription", "File converter from .gcode to .x3g"
+            VALUE "FileDescription", "GpxUi - Converts .gcode to .x3g"
             VALUE "FileVersion", GPXUI_VERSION
             VALUE "InternalName", "GpxUi.exe"
             VALUE "LegalCopyright", "Copyright (c) 2015. All rights reserved."
