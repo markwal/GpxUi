@@ -1,3 +1,17 @@
+# GpxUi 0.1.6
+
+## Improvements
+
+  * Windows Explorer gets 'Convert to X3g' on the right click menu
+  * GPX has new gcode macros
+
+## Bug fixes
+
+  * Linux build works (no setup or releases yet though)
+  * Handle .ini location better so that upgrades are hopefully smoother
+
+([Commits](https://github.com/markwal/GpxUi/compare/0.1.5...0.1.6))
+
 # GpxUi 0.1.5
 
 ## Improvements

@@ -67,7 +67,7 @@ Help.Updates... menu.
 
 ## Dependencies
 
-- [QT 5.4](https://www.qt.io/developers)
+- [QT 5.5](https://www.qt.io/developers)
 - [Squirrel.Windows](https://github.com/Squirrel/Squirrel.Windows) (only need
   this if you are going to build setup)
 
