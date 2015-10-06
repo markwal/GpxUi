@@ -7,6 +7,10 @@ url: "http://markwal.github.io" # the base hostname & protocol for your site
 twitter_username: walkmarker
 github_username:  markwal
 
+collections:
+    docs:
+        output: true
+
 # Build settings
 markdown: kramdown
 highlighter: pygments

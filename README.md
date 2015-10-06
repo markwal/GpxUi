@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: welcome
 title: GpxUi
 permalink: /index.html
 ---
@@ -32,18 +32,19 @@ with arcane stuff like how many steps per mm.
 
 ## Notes
 
-The setup added gpx.exe to your path, so you can easily add it as a post
-processor to Slic3r:
+The setup added gpx.exe to your path, you can use this to aid in making plugins
+for various slicers.  Unfortunately Slic3r needs an absolute path to its post
+processing scripts so it can check to make sure it exists and is executable.
+Setup also created an lnk file so that you can point Slic3r at the latest installed
+version.
+
+To add gpx as a post processor to Slic3r (makes an x3g whenever you export to gcode):
 
   1. Put Slic3r into expert mode via File.Preferences from the menu bar and
      restart Slic3r
   2. Choose "Print Settings" tab, "Output options" panel
-  3. In "Post-processing scripts" type "gpx.exe" all by itself without quotes
-     or parameters
-
-It added to the end of your path, so if you have a gpx.exe somewhere else on
-your machine and on your path, it won't read the settings you set in GpxUi because
-the other one will win and it won't know where these settings are.
+  3. In "Post-processing scripts" type "c:\users\<yourusernamehere>\appdata\local\GpxUi\gpx.exe.lnk" all by itself without quotes
+     or parameters and with your own user name instead of <yourusernamehere>
 
 You can switch the settings around and gpx.exe will just use whatever you saved
 last.  Settings are also saved when you use GpxUi to translate a file.
