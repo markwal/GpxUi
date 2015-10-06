@@ -7,9 +7,9 @@ GpxUi is a graphical user interface wrapped around GPX, a command line utility.
 
 ![Screenshot](gpxui.png)
 
-It is Window only at the moment, but I made it with Qt with the intention of building
+It is Windows only at the moment, but I made it with Qt with the intention of building
 it for other platforms. I don't have a Mac, but I've got Linux, so if there is interest
-I'll make a linux version.
+I'll make a Linux version.
 
 GPX is a post processing utility for converting gcode output from 3D slicing
 software like Cura, KISSlicer, S3DCreator and Slic3r to x3g files for standalone
