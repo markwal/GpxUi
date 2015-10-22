@@ -11,6 +11,11 @@ either.  Those firmwares get their instructions either from a file on an SD card
 or over serial communication with a computer using a USB cable. The instructions
 are in a format called x3g.
 
+Often the things we want to print are stored in a format called STL which we
+transform into gcode (sometimes called a toolpath) with a software tool called a
+slicer and then for our printers, there is one more step to turn gcode into a
+binary instruction language called x3g.
+
 {% include image.html url="docs/model_to_plastic.png" caption="From model to plastic (example is <A href='http://www.thingiverse.com/thing:11705'>Squirrel</A> by MBCook)" %}
 
 ### STL - STereoLithography

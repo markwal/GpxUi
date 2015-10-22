@@ -169,4 +169,65 @@ extruder's nozzle temperature to <<TEMP>> degrees celsius. If it less than or
 equal to 120 then it sets the heated build platform temperature to <<TEMP>> 
 degrees celsius.
 
+### ;@start <<NAME>> | <<TEMP>>c
 
+Sets the target nozzle temperature or bed temperature (120 degrees is the break
+point, below is assumed to be bed, above is assumed to be nozzle). Can't be used
+to set the target temperature to 0.
+
+Or (mutually exclusive with the temperature setting) set the current filament as
+defined by an earlier `(@filament)`.
+
+### ;@build <<NAME>>
+
+Set the build name. It will be sent to the bot on the first progress (M73) or start
+build g-code (M136) and will show on the LCD with the progress percentage.
+
+### ;@flavor reprap | makerbot
+
+Sets the current flavor of gcode to either reprap or makerbot. The flavor of
+gcode is the kind of gcode that is produced by your slicer. Either way, GPX
+generates x3g. ReplicatorG and MakerBot Desktop produce MakerBot flavor gcode.
+Basically all other slicers produce reprap flavor gcode.
+
+The differences that GPX is aware of are:
+
+#### Tn
+
+In reprap flavor, any Tn changes the current extruder for all following
+commands.  In MakerBot flavor Tn parameters are not sticky (mostly, though it's
+inexplicably complicated).
+
+#### M106/M107
+
+In reprap flavor, M106/M106 turns on/off the part cooling fan.  In MakerBot
+flavor, M106/M107 controls the extruder heatsink fan. M106 enables the fan so
+that it will come on when the extruder crosses the eeprom temperature threshold
+(defaults to 50 degrees celsius). M107 turns it off, off.
+
+If you run slic3r auto fan control gcode through as MakerBot flavor, the result
+may be a jam because of the lack of extruder cooling (plus it didn't turn on the
+part cooling fan).
+
+#### M109
+
+Reprap flavor, M109 means set the extruder temperature and wait for it to reach
+that temperature.  MakerBot flavor, M109 means set the build platform
+temperature and don't wait.
+
+### ;@body
+
+Tells GPX that the start gcode is over and the nozzle is no longer at the
+waiting height. Enables macros.
+
+### ;@header
+### ;@footer
+
+Looks like these were intended to turn off macro interpretation at the start and
+the end, but there is a bug where these macros are not recognized by GPX so at
+the current time, they don't do anything.
+
+### ;@debug
+
+A debugging macro for logging information about the internal state of the GPX
+parser.
