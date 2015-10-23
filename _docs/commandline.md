@@ -3,7 +3,8 @@ layout: doc
 title: Command Line
 permalink: commandline.html
 ---
-# gpx [-CFdgilpqrstvw] [-b BAUDRATE] [-b BAUDRATE] [-c CONFIG] [-e EEPROM] [-f DIAMETER] [-m MACHINE] [-N h|t|ht] [-n SCALE] [-x X] [-y Y] [-z Z] IN [OUT]
+{% highlight %}
+gpx [-CFdgilpqrstvw] [-b BAUDRATE] [-b BAUDRATE] [-c CONFIG] [-e EEPROM] [-f DIAMETER] [-m MACHINE] [-N h|t|ht] [-n SCALE] [-x X] [-y Y] [-z Z] IN [OUT]
 
 Options:
 
@@ -71,9 +72,8 @@ OUT: the name of the X3G output filenameor the serial I/O port
        specify '--' to write to stdout
 
 Examples:
-```
 	gpx -p -m r2 my-sliced-model.gcode
 	gpx -c custom-tom.ini example.gcode /volumes/things/example.x3g
 	gpx -x 3 -y -3 offset-model.gcode
 	gpx -m c4 -s sio-example.gcode /dev/tty.usbmodem
-```
+{% endhighlight %}
