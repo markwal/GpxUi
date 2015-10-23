@@ -3,7 +3,7 @@ layout: doc
 title: Command Line
 permalink: commandline.html
 ---
-{% highlight %}
+{% highlight text %}
 gpx [-CFdgilpqrstvw] [-b BAUDRATE] [-b BAUDRATE] [-c CONFIG] [-e EEPROM] [-f DIAMETER] [-m MACHINE] [-N h|t|ht] [-n SCALE] [-x X] [-y Y] [-z Z] IN [OUT]
 
 Options:
