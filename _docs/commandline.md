@@ -6,6 +6,7 @@ permalink: commandline.html
 # gpx [-CFdgilpqrstvw] [-b BAUDRATE] [-b BAUDRATE] [-c CONFIG] [-e EEPROM] [-f DIAMETER] [-m MACHINE] [-N h|t|ht] [-n SCALE] [-x X] [-y Y] [-z Z] IN [OUT]
 
 Options:
+
 	-C	Create temporary file with a copy of the machine configuration
 	-F	write X3G on-wire framing data to output file
 	-N	Disable writing of the X3G header (start build notice),
@@ -23,11 +24,15 @@ Options:
 	-w	rewrite 5d extrusion values
 
 BAUDRATE: the baudrate for serial I/O (default is 115200)
+
 CONFIG: the filename of a custom machine definition (ini file)
+
 EEPROM: the filename of an eeprom settings definition (ini file)
+
 DIAMETER: the actual filament diameter in the printer
 
 MACHINE: the predefined machine type
+
 	some machine definitions have been updated with corrected steps per mm
 	the original can be selected by prefixing o to the machine id
 	(or1, or1d, or2, or2h, orx, ot7, ot7d)
@@ -52,18 +57,23 @@ MACHINE: the predefined machine type
 	fcp = FlashForge Creator Pro
 
 SCALE: the coordinate system scale for the conversion (ABS = 1.0035)
+
 X,Y & Z: the coordinate system offsets for the conversion
+
 	X = the x axis offset
 	Y = the y axis offset
 	Z = the z axis offset
 
 IN: the name of the sliced gcode input filename
+
 OUT: the name of the X3G output filenameor the serial I/O port
+
        specify '--' to write to stdout
 
 Examples:
+```
 	gpx -p -m r2 my-sliced-model.gcode
 	gpx -c custom-tom.ini example.gcode /volumes/things/example.x3g
 	gpx -x 3 -y -3 offset-model.gcode
 	gpx -m c4 -s sio-example.gcode /dev/tty.usbmodem
-
+```
