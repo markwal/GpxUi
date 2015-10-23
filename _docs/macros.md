@@ -220,8 +220,7 @@ temperature and don't wait.
 Tells GPX that the start gcode is over and the nozzle is no longer at the
 waiting height. Enables macros.
 
-### ;@header
-### ;@footer
+### ;@header<br/>;@footer
 
 Looks like these were intended to turn off macro interpretation at the start and
 the end, but there is a bug where these macros are not recognized by GPX so at
