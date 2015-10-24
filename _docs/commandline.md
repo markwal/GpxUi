@@ -3,6 +3,10 @@ layout: doc
 title: Command Line
 permalink: commandline.html
 ---
+You can control a bunch of the gpx options from the command line. Many of these
+options can also be set using @ macros directly in the gcode and/or a settings
+file (gpx.ini). You can easily set up the .ini file using a GUI using GpxUi.
+
 {% highlight text %}
 gpx [-CFdgilpqrstvw] [-b BAUDRATE] [-b BAUDRATE] [-c CONFIG] [-e EEPROM] [-f DIAMETER] [-m MACHINE] [-N h|t|ht] [-n SCALE] [-x X] [-y Y] [-z Z] IN [OUT]
 
