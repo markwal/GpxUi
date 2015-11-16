@@ -23,7 +23,7 @@ with arcane stuff like how many steps per mm.
 
 ## Installing and running
 
-  1. Download and run setup.exe from the [releases](https://github.com/markwalGpxUi/releases/latest) page
+  1. Download and run setup.exe from the [releases](https://github.com/markwal/GpxUi/releases/latest) page
   2. Choose your printer type
   3. Choose the gcode flavor of the slicer you want to use
   4. Click "Save" to save those two settings into gpx.ini
