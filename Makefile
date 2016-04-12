@@ -35,7 +35,7 @@ else
 endif
 
 # Variables
-SUBDIRS = $(QTSUBDIRS) GPX/build
+SUBDIRS = $(QTSUBDIRS) GPX
 QTBIN := $(dir $(abspath $(shell which qmake)))
 
 # Version Variables
@@ -64,14 +64,14 @@ endif
 
 .PHONY: first all clean test debug release loopdirs populatewinbin windeployqt squirrel.windows
 
-first debug: build/version.h GPX/build/Makefile $(QTDEBUGMAKEFILE)
+first debug: build/version.h $(QTDEBUGMAKEFILE)
 	for dir in $(QTDEBUGDIR) $(SUBDIRS); do \
 		echo "Entering $$dir"; \
 		make -C $$dir $(DEBUGTARGET); \
 		echo "Exiting $$dir"; \
 	done
 
-release: build/version.h GPX/build/Makefile $(QTRELEASEMAKEFILE)
+release: build/version.h $(QTRELEASEMAKEFILE)
 	for dir in $(QTRELEASEDIR) $(SUBDIRS); do \
 		echo "Entering $$dir"; \
 		make -C $$dir $(RELEASETARGET); \
@@ -100,10 +100,6 @@ build/version.h: .git/HEAD .git/index
 	@echo "#define GPXUI_VERSION \"$(GPXUI_VERSION)\"" > $@
 	@echo "#define GPXUI_RCVERSION $(GPXUI_RCVERSION)" >> $@
 	@echo "#define GPXUI_ORIGIN \"$(GPXUI_ORIGIN)\"" >> $@
-
-GPX/build/Makefile:
-	mkdir -p GPX/build
-	cd GPX/build ; ../configure
 
 populatewinbin: release
 	mkdir -p $(SQUIRRELWINBIN)
