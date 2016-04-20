@@ -15,8 +15,18 @@ else
     ifeq ($(UNAMESYS),Darwin)
 
     # Mac
-    QTSUBDIRS := build/darwin
-    # what QMAKEFLAGS?
+    QTDEBUGDIR := build/macx/debug
+    QTRELEASEDIR := build/macx/release
+    DEBUGTARGET := all
+    RELEASETARGET := all
+    QTSUBDIRS :=
+    QTFROMBUILDTOROOT := ../../../
+    QMAKEDEBUGFLAGS := -r -spec macx-clang "CONFIG+=debug" "CONFIG+=declarative_debug" "CONFIG+=qml_debug"
+    QMAKERELEASEFLAGS := -r -spec macx-clang
+    QTDEBUGMAKEFILE := $(QTDEBUGDIR)/Makefile
+    QTRELEASEMAKEFILE := $(QTRELEASEDIR)/Makefile
+    QTMAKEFILES := $(QTDEBUGMAKEFILE) $(QTRELEASEMAKEFILE)
+
     else
 
     # Linux
@@ -101,9 +111,9 @@ build/version.h: .git/HEAD .git/index
 	@echo "#define GPXUI_RCVERSION $(GPXUI_RCVERSION)" >> $@
 	@echo "#define GPXUI_ORIGIN \"$(GPXUI_ORIGIN)\"" >> $@
 
-GPX/build/Makefile:
+GPX/build/Makefile: GPX/configure
 	mkdir -p GPX/build
-	cd GPX/build ; ../configure
+	cd GPX/build && ../configure
 
 populatewinbin: release
 	mkdir -p $(SQUIRRELWINBIN)
