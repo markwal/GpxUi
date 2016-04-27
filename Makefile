@@ -90,6 +90,13 @@ release: build/version.h GPX/build/Makefile $(QTRELEASEMAKEFILE)
 
 all: first release
 
+install: build/version.h GPX/build/Makefile $(QTRELEASEMAKEFILE)
+	for dir in $(SUBDIRS) $(QTRELEASEDIR); do \
+		echo "Entering $$dir"; \
+		make -C $$dir $@; \
+		echo "Exiting $$dir"; \
+	done
+
 clean test: build/version.h $(QTMAKEFILES)
 	for dir in $(SUBDIRS) $(QTDEBUGDIR) $(QTRELEASEDIR); do \
 		echo "Entering $$dir"; \

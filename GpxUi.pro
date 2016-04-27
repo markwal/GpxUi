@@ -13,13 +13,20 @@ TEMPLATE = app
 
 DEFINES += NOTIFY_SECTION_CHANGE=1
 
-SOURCES += main.cpp\
+SOURCES += main.cpp \
         mainwindow.cpp \
     rungpx.cpp \
     inih/ini.c \
     iniedit.cpp \
     machineeditor.cpp \
     updates.cpp
+
+unix:desktop.path = /usr/share/applications
+unix:desktop.files = GpxUi.desktop
+
+unix:target.path = /usr/local/bin
+
+unix:INSTALLS += target desktop
 
 win32:SOURCES += win/win.cpp
 
