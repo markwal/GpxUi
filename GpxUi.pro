@@ -14,21 +14,25 @@ TEMPLATE = app
 DEFINES += NOTIFY_SECTION_CHANGE=1
 
 SOURCES += main.cpp \
-        mainwindow.cpp \
+    mainwindow.cpp \
     rungpx.cpp \
     inih/ini.c \
     iniedit.cpp \
     machineeditor.cpp \
     updates.cpp
 
-unix:desktop.path = /usr/share/applications
-unix:desktop.files = GpxUi.desktop
-
-unix:target.path = /usr/local/bin
-
-unix:INSTALLS += target desktop
-
 win32:SOURCES += win/win.cpp
+
+unix:!macx {
+    desktop.path = /usr/share/applications
+    desktop.files = GpxUi.desktop
+    target.path = /usr/local/bin
+    INSTALLS += desktop
+}
+macx:QMAKE_POST_LINK += cp ../../../GPX/build/src/gpx/gpx GpxUi.app/Contents/MacOS &
+macx:target.path = /Applications
+
+INSTALLS += target
 
 HEADERS  += mainwindow.h \
     rungpx.h \
