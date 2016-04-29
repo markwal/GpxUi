@@ -106,11 +106,11 @@ clean test: build/version.h $(QTMAKEFILES)
 
 $(QTDEBUGMAKEFILE): GpxUi.pro
 	mkdir -p $(dir $@)
-	cd $(dir $@); qmake $(QTFROMBUILDTOROOT)$< $(QMAKEDEBUGFLAGS)
+	cd $(dir $@); qmake -qt5 $(QTFROMBUILDTOROOT)$< $(QMAKEDEBUGFLAGS)
 
 $(QTRELEASEMAKEFILE): GpxUi.pro
 	mkdir -p $(dir $@)
-	cd $(dir $@); qmake $(QTFROMBUILDTOROOT)$< $(QMAKERELEASEFLAGS)
+	cd $(dir $@); qmake -qt5 $(QTFROMBUILDTOROOT)$< $(QMAKERELEASEFLAGS)
 
 build/version.h: .git/HEAD .git/index
 	mkdir -p build
