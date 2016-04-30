@@ -44,7 +44,7 @@ else
     QTDEBUGMAKEFILE := $(QTDEBUGDIR)/Makefile
     QTRELEASEMAKEFILE := $(QTRELEASEDIR)/Makefile
     QTMAKEFILES := $(QTDEBUGMAKEFILE) $(QTRELEASEMAKEFILE)
-    QTVER := -Qt5
+    QTVER := -qt5
     endif
 endif
 
