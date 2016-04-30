@@ -10,6 +10,7 @@ ifeq ($(OS),Windows_NT)
     QMAKEDEBUGFLAGS := -r -spec win32-g++ "CONFIG+=debug"
     QTMAKEFILES := $(addsuffix /Makefile,$(QTSUBDIRS))
     QTDEBUGMAKEFILE := $(QTMAKEFILES)
+    QTVER :=
 else
     UNAMESYS := $(shell uname -s)
     ifeq ($(UNAMESYS),Darwin)
@@ -22,10 +23,12 @@ else
     QTSUBDIRS :=
     QTFROMBUILDTOROOT := ../../../
     QMAKEDEBUGFLAGS := -r -spec macx-clang "CONFIG+=debug" "CONFIG+=declarative_debug" "CONFIG+=qml_debug"
-    QMAKERELEASEFLAGS := -r -spec macx-clang
+    QMAKERELEASEFLAGS := -r -spec macx-clang "LIBS+=-dead_strip"
     QTDEBUGMAKEFILE := $(QTDEBUGDIR)/Makefile
     QTRELEASEMAKEFILE := $(QTRELEASEDIR)/Makefile
     QTMAKEFILES := $(QTDEBUGMAKEFILE) $(QTRELEASEMAKEFILE)
+    QTVER :=
+    CODESIGNID :=
 
     else
 
@@ -41,6 +44,7 @@ else
     QTDEBUGMAKEFILE := $(QTDEBUGDIR)/Makefile
     QTRELEASEMAKEFILE := $(QTRELEASEDIR)/Makefile
     QTMAKEFILES := $(QTDEBUGMAKEFILE) $(QTRELEASEMAKEFILE)
+    QTVER := -Qt5
     endif
 endif
 
@@ -106,11 +110,11 @@ clean test: build/version.h $(QTMAKEFILES)
 
 $(QTDEBUGMAKEFILE): GpxUi.pro
 	mkdir -p $(dir $@)
-	cd $(dir $@); qmake -qt5 $(QTFROMBUILDTOROOT)$< $(QMAKEDEBUGFLAGS)
+	cd $(dir $@); qmake $(QTVER) $(QTFROMBUILDTOROOT)$< $(QMAKEDEBUGFLAGS)
 
 $(QTRELEASEMAKEFILE): GpxUi.pro
 	mkdir -p $(dir $@)
-	cd $(dir $@); qmake -qt5 $(QTFROMBUILDTOROOT)$< $(QMAKERELEASEFLAGS)
+	cd $(dir $@); qmake $(QTVER) $(QTFROMBUILDTOROOT)$< $(QMAKERELEASEFLAGS)
 
 build/version.h: .git/HEAD .git/index
 	mkdir -p build
@@ -139,3 +143,7 @@ windeployqt: populatewinbin
 squirrel.windows: $(WINDEPLOYQT)
 	nuget pack gpx.nuspec -Version $(GPXUI_VERSION) -BasePath $(SQUIRRELWINBASE) -OutputDirectory $(SQUIRRELWIN)
 	Squirrel --releasify build/squirrel.windows/GpxUi.$(GPXUI_VERSION).nupkg --releaseDir=$(SQUIRRELWIN)release
+
+macdeployqt: release
+	-rm $(QTRELEASEDIR)/GpxUi.dmg
+	cd $(QTRELEASEDIR) ; macdeployqt GpxUi.app -verbose=2 -no-plugins -dmg -codesign="$(CODESIGNID)"
