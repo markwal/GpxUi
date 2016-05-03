@@ -2,6 +2,7 @@
 layout: doc
 title: EEPROM macros
 permalink: eeprommacros.html
+order: 4
 ---
 
 ### ;@load\_eeprom_map

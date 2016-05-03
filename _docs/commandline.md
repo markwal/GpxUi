@@ -2,6 +2,7 @@
 layout: doc
 title: Command Line
 permalink: commandline.html
+order: 2
 ---
 You can control a bunch of the gpx options from the command line. Many of these
 options can also be set using @ macros directly in the gcode and/or a settings

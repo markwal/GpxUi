@@ -26,7 +26,8 @@ layout: default
   <div class="row">
     <div id="sidebar" class="col-sm-3 col-md-2 sidebar">
       <ul class="nav nav-sidebar">
-        {% for doc in site.docs %}
+        {% assign docs = site.docs | sort: 'order' %}
+        {% for doc in docs %}
         <li><a href="{{ doc.url | prepend: site.baseurl }}">{{ doc.title }}</a></li>
         {% endfor %}
       </ul>

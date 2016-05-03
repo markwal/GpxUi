@@ -2,6 +2,7 @@
 layout: doc
 title: Macros
 permalink: macros.html
+order: 3
 ---
 GPX supports macros in the gcode stream to control GPX settings as well as
 to access x3g protocol capabilities that don't map directly onto gcode.  The GPX

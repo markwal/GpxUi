@@ -2,6 +2,7 @@
 layout: doc
 title: Introduction
 permalink: intro.html
+order: 1
 ---
 ## Files, Formats and Protocols
 I assume the reason you are here is because you have (or at least the use of) a
