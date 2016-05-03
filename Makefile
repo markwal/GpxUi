@@ -128,7 +128,7 @@ GPX/build/Makefile: GPX/configure
 
 populatewinbin: release
 	mkdir -p $(SQUIRRELWINBIN)
-	cp GPX/src/gpx/win32_obj/gpx.exe $(SQUIRRELWINBIN)
+	cp GPX/build/src/gpx/gpx.exe $(SQUIRRELWINBIN)
 	cp build/mingw32/release/GpxUi.exe $(SQUIRRELWINBIN)
 	cp README.md $(SQUIRRELWINBIN)
 	cp RELEASE.md $(SQUIRRELWINBIN)
