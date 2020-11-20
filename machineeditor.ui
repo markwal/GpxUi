@@ -333,7 +333,7 @@
             <number>6</number>
            </property>
            <property name="maximum">
-            <double>1000.000000000000000</double>
+            <double>100000.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -412,7 +412,7 @@
             <number>6</number>
            </property>
            <property name="maximum">
-            <double>1000.000000000000000</double>
+            <double>100000.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -491,7 +491,7 @@
             <number>6</number>
            </property>
            <property name="maximum">
-            <double>1000.000000000000000</double>
+            <double>100000.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -576,7 +576,7 @@
             <number>31</number>
            </property>
            <property name="maximum">
-            <double>1000.000000000000000</double>
+            <double>100000.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -656,7 +656,7 @@
             <number>31</number>
            </property>
            <property name="maximum">
-            <double>1000.000000000000000</double>
+            <double>100000.000000000000000</double>
            </property>
           </widget>
          </item>
