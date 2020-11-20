@@ -1,8 +1,9 @@
 #ifndef INIEDIT_H
 #define INIEDIT_H
 
+#include <list>
+
 #include <QString>
-#include <QLinkedList>
 #include <QMap>
 #include <QFile>
 #include <QFileInfo>
@@ -29,7 +30,7 @@ public:
     inline int operator==(Line &e) { return (this == &e); }
 };
 
-typedef QLinkedList<Line> LineList;
+typedef std::list<Line> LineList;
 typedef LineList::iterator LineIterator;
 typedef LineList::const_iterator ConstLineIterator;
 typedef QMap<QString, LineIterator> LineIndex;

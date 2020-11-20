@@ -43,7 +43,7 @@ char *IniEditor::parserReader(char *szBuffer, int cbBuffer)
 
     if (szLineParsing[cb - 1] == '\n')
         szLineParsing[cb - 1] = 0;
-    ll.append(Line(false, ll.count(), QString(), QString(), szLineParsing));
+    ll.push_back(Line(false, ll.size(), QString(), QString(), szLineParsing));
     return szBuffer;
 }
 
@@ -111,7 +111,7 @@ bool IniEditor::write()
         return false;
 
     QTextStream ts(&file);
-    for (ConstLineIterator iline = ll.constBegin(); iline != ll.constEnd(); iline++) {
+    for (ConstLineIterator iline = ll.cbegin(); iline != ll.cend(); iline++) {
         if (!iline->fDeleted)
             ts << iline->sLine << "\n";
     }
@@ -129,21 +129,21 @@ bool IniEditor::copyTo(QDir dir)
 void Section::dump() const
 {
     for (LineIndex::const_iterator il = li.constBegin(); il != li.constEnd(); il++) {
-        qStdout() << il.value()->sName << "=" << il.value()->sValue << endl;
+        qStdout() << il.value()->sName << "=" << il.value()->sValue << Qt::endl;
     }
 }
 
 void IniEditor::dump() const
 {
     for (SectionIndex::const_iterator is = si.constBegin(); is != si.constEnd(); is++) {
-        qStdout() << "[" << is.key() << "]" << endl;
+        qStdout() << "[" << is.key() << "]" << Qt::endl;
         is.value().dump();
     }
 
-    for (ConstLineIterator iline = ll.constBegin(); iline != ll.constEnd(); iline++ ) {
+    for (ConstLineIterator iline = ll.cbegin(); iline != ll.cbegin(); iline++ ) {
         qStdout() << iline->sLine;
     }
-    qStdout() << endl;
+    qStdout() << Qt::endl;
 }
 
 Section &IniEditor::section(QString s)
@@ -178,7 +178,7 @@ const QString Section::value(const QString &sPropertyName, const QString &sDefau
 
 const QString Section::value(const QString &sPropertyName) const
 {
-    return value(sPropertyName, QString::null);
+    return value(sPropertyName, QString());
 }
 
 int Section::intValue(const QString &sPropertyName, int iDefault) const
@@ -216,7 +216,7 @@ void Section::setValue(const QString &sPropertyName, const QString &s)
     else {
         iline = ilineLast;
         if (iline == pie->ll.end())
-            pie->ll.append(Line(false, -1, "", "", QString("[%1]").arg(sName)));
+            pie->ll.push_back(Line(false, -1, "", "", QString("[%1]").arg(sName)));
         else
             iline++;
         iline = pie->ll.insert(iline, Line(true, -1, sPropertyName, s,
